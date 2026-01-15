@@ -221,8 +221,15 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
   };
 
   return (
-    <Box ref={ref} {...getStyles('root', { style: { '--select-stepper-scroll-offset': `${scrollOffset}%` } as React.CSSProperties })} {...others}>
-      <Group onKeyDown={handleKeyDown}>
+    <Box
+      ref={ref}
+      {...getStyles('root', { style: { '--select-stepper-scroll-offset': `${scrollOffset}%` } as React.CSSProperties })}
+      {...others}
+      onKeyDown={handleKeyDown}
+      tabIndex={disabled ? -1 : 0}
+      role="spinbutton"
+    >
+      <Group>
         <ActionIcon {...getStyles('leftSection')} disabled={disabled || !canGoPrev} onClick={handleLeftClick}>
           {leftIcon}
         </ActionIcon>
