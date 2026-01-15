@@ -1,10 +1,10 @@
-import { Led } from '@gfazioli/mantine-led';
+import { SelectStepper } from '@gfazioli/mantine-select-stepper';
 import { Paper, SimpleGrid, Stack, Text, Title } from '@mantine/core';
 import { MantineDemo } from '@mantinex/demo';
 
 const code = `
 import { Group, Paper, SimpleGrid, Stack, Text, Title } from '@mantine/core';
-import { Led } from '@gfazioli/mantine-led';
+import { SelectStepper } from '@gfazioli/mantine-select-stepper';
 
 function Demo() {
   return (
@@ -16,16 +16,16 @@ function Demo() {
           <Stack gap="md">
             <Text fw={500} size="sm">Network</Text>
             <Stack gap="xs">
-              <Led value label="Internet" color="green" labelPosition="left" />
-              <Led value label="LAN" color="green" labelPosition="left" />
-              <Led value={false} label="VPN" color="gray" labelPosition="left" />
+              <SelectStepper value label="Internet" color="green" labelPosition="left" />
+              <SelectStepper value label="LAN" color="green" labelPosition="left" />
+              <SelectStepper value={false} label="VPN" color="gray" labelPosition="left" />
             </Stack>
           </Stack>
 
           <Stack gap="md">
             <Text fw={500} size="sm">Services</Text>
             <Stack gap="xs">
-              <Led
+              <SelectStepper
                 value
                 label="Database"
                 color="green"
@@ -33,17 +33,17 @@ function Demo() {
                 animate
                 animationType="pulse"
               />
-              <Led value label="API Server" color="green" labelPosition="left" />
-              <Led value label="Cache" color="yellow" labelPosition="left" />
+              <SelectStepper value label="API Server" color="green" labelPosition="left" />
+              <SelectStepper value label="Cache" color="yellow" labelPosition="left" />
             </Stack>
           </Stack>
 
           <Stack gap="md">
             <Text fw={500} size="sm">Resources</Text>
             <Stack gap="xs">
-              <Led value label="CPU Load" color="green" labelPosition="left" />
-              <Led value label="Memory" color="yellow" labelPosition="left" />
-              <Led
+              <SelectStepper value label="CPU Load" color="green" labelPosition="left" />
+              <SelectStepper value label="Memory" color="yellow" labelPosition="left" />
+              <SelectStepper
                 value
                 label="Disk Space"
                 color="red"
@@ -57,9 +57,9 @@ function Demo() {
           <Stack gap="md">
             <Text fw={500} size="sm">Security</Text>
             <Stack gap="xs">
-              <Led value label="Firewall" color="green" labelPosition="left" />
-              <Led value label="SSL Cert" color="green" labelPosition="left" />
-              <Led value label="Auth Service" color="green" labelPosition="left" />
+              <SelectStepper value label="Firewall" color="green" labelPosition="left" />
+              <SelectStepper value label="SSL Cert" color="green" labelPosition="left" />
+              <SelectStepper value label="Auth Service" color="green" labelPosition="left" />
             </Stack>
           </Stack>
         </SimpleGrid>
@@ -80,9 +80,9 @@ function Demo() {
             <Text fw={800}>Network</Text>
             <Paper withBorder p="md">
               <Stack gap="xs">
-                <Led label="Internet" color="green" labelPosition="left" justify="space-between" />
-                <Led label="LAN" color="green" labelPosition="left" justify="space-between" />
-                <Led value={false} label="VPN" color="gray" labelPosition="left" justify="space-between" />
+                <SelectStepper label="Internet" color="green" labelPosition="left" justify="space-between" />
+                <SelectStepper label="LAN" color="green" labelPosition="left" justify="space-between" />
+                <SelectStepper value={false} label="VPN" color="gray" labelPosition="left" justify="space-between" />
               </Stack>
             </Paper>
           </Stack>
@@ -91,9 +91,9 @@ function Demo() {
             <Text fw={800}>Services</Text>
             <Paper withBorder p="md">
               <Stack gap="xs">
-                <Led value label="Database" color="green" labelPosition="left" animate animationType="blink" justify="space-between" />
-                <Led label="API Server" color="green" labelPosition="left" justify="space-between" />
-                <Led label="Cache" color="yellow" labelPosition="left" justify="space-between" />
+                <SelectStepper value label="Database" color="green" labelPosition="left" animate animationType="blink" justify="space-between" />
+                <SelectStepper label="API Server" color="green" labelPosition="left" justify="space-between" />
+                <SelectStepper label="Cache" color="yellow" labelPosition="left" justify="space-between" />
               </Stack>
             </Paper>
           </Stack>
@@ -102,9 +102,9 @@ function Demo() {
             <Text fw={800}>Resources</Text>
             <Paper withBorder p="md">
               <Stack gap="xs">
-                <Led label="CPU Load" color="green" labelPosition="left" justify="space-between" animate animationType="glow" />
-                <Led label="Memory" color="yellow" labelPosition="left" justify="space-between" />
-                <Led value label="Disk Space" color="red" labelPosition="left" animate animationType="flash" justify="space-between" />
+                <SelectStepper label="CPU Load" color="green" labelPosition="left" justify="space-between" animate animationType="glow" />
+                <SelectStepper label="Memory" color="yellow" labelPosition="left" justify="space-between" />
+                <SelectStepper value label="Disk Space" color="red" labelPosition="left" animate animationType="flash" justify="space-between" />
               </Stack>
             </Paper>
           </Stack>
@@ -113,9 +113,9 @@ function Demo() {
             <Text fw={800}>Security</Text>
             <Paper withBorder p="md">
               <Stack gap="xs">
-                <Led label="Firewall" color="green" labelPosition="left" justify="space-between" />
-                <Led label="SSL Cert" color="green" labelPosition="left" justify="space-between" value={false} />
-                <Led label="Auth Service" color="green" labelPosition="left" justify="space-between" />
+                <SelectStepper label="Firewall" color="green" labelPosition="left" justify="space-between" />
+                <SelectStepper label="SSL Cert" color="green" labelPosition="left" justify="space-between" value={false} />
+                <SelectStepper label="Auth Service" color="green" labelPosition="left" justify="space-between" />
               </Stack>
             </Paper>
           </Stack>

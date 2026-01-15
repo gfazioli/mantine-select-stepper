@@ -1,19 +1,19 @@
-import { Led } from '@gfazioli/mantine-led';
+import { SelectStepper } from '@gfazioli/mantine-select-stepper';
 import { MantineDemo } from '@mantinex/demo';
 
 const code = `
-import { Led } from '@gfazioli/mantine-led';
+import { SelectStepper } from '@gfazioli/mantine-select-stepper';
 
 function Demo() {
   return (
-    <Led{{props}}/>
+    <SelectStepper{{props}}/>
   );
 }
 `;
 
 export const configurator: MantineDemo = {
   type: 'configurator',
-  component: (props) => <Led {...props} />,
+  component: (props) => <SelectStepper {...props} />,
   code,
   centered: true,
   controls: [

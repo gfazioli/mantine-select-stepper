@@ -1,13 +1,13 @@
-# Mantine Led Component
+# Mantine SelectStepper Component
 
-<img  alt="Mantine Led" src="https://github.com/gfazioli/mantine-led/blob/master/logo.png" />
+<img  alt="Mantine SelectStepper" src="https://github.com/gfazioli/mantine-select-stepper/blob/master/logo.png" />
 
 <div align="center">
 
-  [![NPM version](https://img.shields.io/npm/v/%40gfazioli%2Fmantine-led?style=for-the-badge)](https://www.npmjs.com/package/@gfazioli/mantine-led)
-  [![NPM Downloads](https://img.shields.io/npm/dm/%40gfazioli%2Fmantine-led?style=for-the-badge)](https://www.npmjs.com/package/@gfazioli/mantine-led)
-  [![NPM Downloads](https://img.shields.io/npm/dy/%40gfazioli%2Fmantine-led?style=for-the-badge&label=%20&color=f90)](https://www.npmjs.com/package/@gfazioli/mantine-led)
-  ![NPM License](https://img.shields.io/npm/l/%40gfazioli%2Fmantine-led?style=for-the-badge)
+  [![NPM version](https://img.shields.io/npm/v/%40gfazioli%2Fmantine-select-stepper?style=for-the-badge)](https://www.npmjs.com/package/@gfazioli/mantine-select-stepper)
+  [![NPM Downloads](https://img.shields.io/npm/dm/%40gfazioli%2Fmantine-select-stepper?style=for-the-badge)](https://www.npmjs.com/package/@gfazioli/mantine-select-stepper)
+  [![NPM Downloads](https://img.shields.io/npm/dy/%40gfazioli%2Fmantine-select-stepper?style=for-the-badge&label=%20&color=f90)](https://www.npmjs.com/package/@gfazioli/mantine-select-stepper)
+  ![NPM License](https://img.shields.io/npm/l/%40gfazioli%2Fmantine-select-stepper?style=for-the-badge)
 
 ---
 
@@ -19,7 +19,7 @@
 
 This component is created on top of the [Mantine](https://mantine.dev/) library.
 
-The [Mantine Led](https://gfazioli.github.io/mantine-led/) component is a highly customizable LED indicator for React applications built with Mantine. It provides visual feedback for status indicators, notifications, and interactive elements with support for various colors, sizes, animations, and states.
+The [Mantine SelectStepper](https://gfazioli.github.io/mantine-select-stepper/) component is a highly customizable LED indicator for React applications built with Mantine. It provides visual feedback for status indicators, notifications, and interactive elements with support for various colors, sizes, animations, and states.
 
 ## Features
 
@@ -35,32 +35,32 @@ The [Mantine Led](https://gfazioli.github.io/mantine-led/) component is a highly
 
 > [!note]
 >
-> → [Demo and Documentation](https://gfazioli.github.io/mantine-led/) → [Youtube Video](https://www.youtube.com/playlist?list=PL85tTROKkZrWyqCcmNCdWajpx05-cTal4) → [More Mantine Components](https://mantine-extensions.vercel.app/)
+> → [Demo and Documentation](https://gfazioli.github.io/mantine-select-stepper/) → [Youtube Video](https://www.youtube.com/playlist?list=PL85tTROKkZrWyqCcmNCdWajpx05-cTal4) → [More Mantine Components](https://mantine-extensions.vercel.app/)
 
 ## Installation
 
 ```sh
-npm install @gfazioli/mantine-led
+npm install @gfazioli/mantine-select-stepper
 ```
 or 
 
 ```sh
-yarn add @gfazioli/mantine-led
+yarn add @gfazioli/mantine-select-stepper
 ```
 
 After installation import package styles at the root of your application:
 
 ```tsx
-import '@gfazioli/mantine-led/styles.css';
+import '@gfazioli/mantine-select-stepper/styles.css';
 ```
 
 ## Usage
 
 ```tsx
-import { Led } from '@gfazioli/mantine-led';
+import { SelectStepper } from '@gfazioli/mantine-select-stepper';
 
 function Demo() {
-  return  <Led />;
+  return  <SelectStepper />;
 }
 ```
 
@@ -88,5 +88,5 @@ Your help truly matters.
 
 ---
   
-[![Star History Chart](https://api.star-history.com/svg?repos=gfazioli/mantine-led&type=Timeline)](https://www.star-history.com/#gfazioli/mantine-led&Timeline)
+[![Star History Chart](https://api.star-history.com/svg?repos=gfazioli/mantine-select-stepper&type=Timeline)](https://www.star-history.com/#gfazioli/mantine-select-stepper&Timeline)
 

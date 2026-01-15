@@ -1,2 +1,2 @@
-export { Led } from './Led';
-export type { LedBaseProps, LedCssVariables, LedFactory } from './Led';
+export { SelectStepper } from './SelectStepper';
+export type { SelectStepperBaseProps, SelectStepperCssVariables, SelectStepperFactory } from './SelectStepper';

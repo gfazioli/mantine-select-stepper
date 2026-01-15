@@ -1,4 +1,4 @@
-import { Led } from '@gfazioli/mantine-led';
+import { SelectStepper } from '@gfazioli/mantine-select-stepper';
 import { Button, Group, Stack } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { MantineDemo } from '@mantinex/demo';
@@ -6,14 +6,14 @@ import { MantineDemo } from '@mantinex/demo';
 const code = `
 import { useState } from 'react';
 import { Button, Group, Stack } from '@mantine/core';
-import { Led } from '@gfazioli/mantine-led';
+import { SelectStepper } from '@gfazioli/mantine-select-stepper';
 
 function Demo() {
   const [value, { open, close, toggle }] = useDisclosure(false);
 
   return (
     <Stack align="center">
-      <Led value={value} size="xl" />
+      <SelectStepper value={value} size="xl" />
       <Group>
         <Button onClick={open} variant="light" color="green">
           Turn On
@@ -35,7 +35,7 @@ function Demo() {
 
   return (
     <Stack align="center">
-      <Led value={value} size="lg" variant="3d" />
+      <SelectStepper value={value} size="lg" variant="3d" />
       <Group>
         <Button onClick={open} variant="light" color="green">
           Turn On

@@ -3,18 +3,18 @@ import * as demos from './demos';
 
 ## Installation
 
-<InstallScript packages="@gfazioli/mantine-led" />
+<InstallScript packages="@gfazioli/mantine-select-stepper" />
 
 After installation import package styles at the root of your application:
 
 ```tsx
-import '@gfazioli/mantine-led/styles.css';
+import '@gfazioli/mantine-select-stepper/styles.css';
 ```
 
-You can import styles within a layer `@layer mantine-led` by importing `@gfazioli/mantine-led/styles.layer.css` file.
+You can import styles within a layer `@layer mantine-select-stepper` by importing `@gfazioli/mantine-select-stepper/styles.layer.css` file.
 
 ```tsx
-import '@gfazioli/mantine-led/styles.layer.css';
+import '@gfazioli/mantine-select-stepper/styles.layer.css';
 ```
 
 ## Usage
@@ -25,13 +25,13 @@ Explore all available props and see the component in action:
 
 ## Controlled
 
-The Led component is fully controlled through the `value` prop. Here's an example of controlling the LED state:
+The SelectStepper component is fully controlled through the `value` prop. Here's an example of controlling the LED state:
 
 <Demo data={demos.controlled} />
 
 ## Colors
 
-The Led component supports all Mantine theme colors. Use the `color` prop to set the LED color:
+The SelectStepper component supports all Mantine theme colors. Use the `color` prop to set the LED color:
 
 <Demo data={demos.colors} />
 
@@ -57,9 +57,9 @@ The `label` prop accepts any React node, allowing you to use custom components l
 
 ## Styles API
 
-`Led` supports [Styles API](https://mantine.dev/styles/styles-api/), you can add styles to any inner element of the component with `classNames` prop. Follow [Styles API](https://mantine.dev/styles/styles-api/) documentation to learn more.
+`SelectStepper` supports [Styles API](https://mantine.dev/styles/styles-api/), you can add styles to any inner element of the component with `classNames` prop. Follow [Styles API](https://mantine.dev/styles/styles-api/) documentation to learn more.
 
-You can customize the appearance of the `Led` component using the Styles API. This allows you to modify styles for various parts of the component, such as the root, led, and label.
+You can customize the appearance of the `SelectStepper` component using the Styles API. This allows you to modify styles for various parts of the component, such as the root, select-stepper, and label.
 
 <Demo data={demos.stylesApi} />
 

@@ -1,13 +1,13 @@
 {
-  "name": "@gfazioli/mantine-led",
+  "name": "@gfazioli/mantine-select-stepper",
   "version": "0.9.0",
   "description": "A highly customizable LED indicator component for React applications built with Mantine. Provides visual feedback for status indicators with support for colors, sizes, animations, and controlled states.",
-  "homepage": "https://gfazioli.github.io/mantine-led/",
+  "homepage": "https://gfazioli.github.io/mantine-select-stepper/",
   "packageManager": "yarn@4.0.1",
   "license": "MIT",
   "author": "Giovambattista Fazioli <giovambattista.fazioli@gmail.com>",
   "keywords": [
-    "led",
+    "select-stepper",
     "extension",
     "mantine",
     "react",
@@ -36,12 +36,13 @@
     "./styles.css": "./dist/styles.css",
     "./styles.layer.css": "./dist/styles.layer.css"
   },
-  "repository": "https://github.com/gfazioli/mantine-led.git",
+  "repository": "https://github.com/gfazioli/mantine-select-stepper.git",
   "peerDependencies": {
     "@mantine/core": ">=7.0.0",
     "@mantine/hooks": ">=7.0.0",
+    "@tabler/icons-react": "^3.34.0",
     "react": "^18.x || ^19.x",
     "react-dom": "^18.x || ^19.x"
   },
-  "bugs": "https://github.com/gfazioli/mantine-led/issues"
+  "bugs": "https://github.com/gfazioli/mantine-select-stepper/issues"
 }

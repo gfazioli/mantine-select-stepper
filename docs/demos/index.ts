@@ -1,8 +1,8 @@
-export { animations } from './Led.demo.animations';
-export { colors } from './Led.demo.colors';
-export { configurator } from './Led.demo.configurator';
-export { controlled } from './Led.demo.controlled';
-export { defcon } from './Led.demo.defcon';
-export { labels } from './Led.demo.labels';
-export { statusPanel } from './Led.demo.statusPanel';
-export { stylesApi } from './Led.demo.stylesApi';
+export { animations } from './SelectStepper.demo.animations';
+export { colors } from './SelectStepper.demo.colors';
+export { configurator } from './SelectStepper.demo.configurator';
+export { controlled } from './SelectStepper.demo.controlled';
+export { defcon } from './SelectStepper.demo.defcon';
+export { labels } from './SelectStepper.demo.labels';
+export { statusPanel } from './SelectStepper.demo.statusPanel';
+export { stylesApi } from './SelectStepper.demo.stylesApi';

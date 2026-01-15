@@ -1,25 +1,25 @@
-import { Led } from '@gfazioli/mantine-led';
+import { SelectStepper } from '@gfazioli/mantine-select-stepper';
 import { MantineDemo } from '@mantinex/demo';
-import { LedStylesApi } from '../styles-api/Led.styles-api';
+import { SelectStepperStylesApi } from '../styles-api/SelectStepper.styles-api';
 
 const code = `
-import { Led } from "@gfazioli/mantine-json-tree";
+import { SelectStepper } from "@gfazioli/mantine-json-tree";
 import { data } from './data';
 
 function Demo() {
   return (
-    <Led{{props}} variant="3d" label="Example Label" size="xl" />
+    <SelectStepper{{props}} variant="3d" label="Example Label" size="xl" />
   );
 }
 `;
 
 function Demo(props: any) {
-  return <Led {...props} variant="3d" label="Example Label" size="xl" />;
+  return <SelectStepper {...props} variant="3d" label="Example Label" size="xl" />;
 }
 
 export const stylesApi: MantineDemo = {
   type: 'styles-api',
-  data: LedStylesApi,
+  data: SelectStepperStylesApi,
   component: Demo,
   code,
   centered: true,
