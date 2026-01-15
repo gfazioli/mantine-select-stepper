@@ -6,104 +6,81 @@ import { SelectStepper } from '@gfazioli/mantine-select-stepper';
 
 function Demo() {
   return (
-    <SelectStepper{{props}}/>
+    <SelectStepper
+      data={['React', 'Angular', 'Vue', 'Svelte', 'Ember']}
+      defaultValue="React"
+      {{props}}
+    />
   );
 }
 `;
 
 export const configurator: MantineDemo = {
   type: 'configurator',
-  component: (props) => <SelectStepper {...props} />,
+  component: (props) => <SelectStepper data={['React', 'Angular', 'Vue', 'Svelte', 'Ember']} defaultValue="React" {...props} />,
   code,
   centered: true,
   controls: [
     {
       type: 'boolean',
-      prop: 'value',
-      initialValue: true,
-      libraryValue: true,
-    },
-    {
-      type: 'segmented',
-      prop: 'variant',
-      initialValue: 'flat',
-      libraryValue: 'flat',
-      data: [
-        { value: 'flat', label: 'Flat' },
-        { value: '3d', label: '3D' },
-      ],
-    },
-    {
-      type: 'color',
-      prop: 'color',
-      initialValue: 'green',
-      libraryValue: 'green',
-    },
-    {
-      type: 'size',
-      prop: 'size',
-      initialValue: 'sm',
-      libraryValue: 'sm',
-    },
-    {
-      type: 'size',
-      prop: 'radius',
-      initialValue: 'xl',
-      libraryValue: 'xl',
-    },
-    {
-      type: 'number',
-      prop: 'intensity',
-      initialValue: 80,
-      libraryValue: 80,
-      min: 0,
-      max: 100,
-      step: 10,
-    },
-    {
-      type: 'boolean',
-      prop: 'animate',
+      prop: 'loop',
       initialValue: false,
       libraryValue: false,
     },
     {
-      type: 'select',
-      prop: 'animationType',
-      initialValue: 'none',
-      libraryValue: 'none',
-      data: [
-        { value: 'none', label: 'None' },
-        { value: 'pulse', label: 'Pulse' },
-        { value: 'flash', label: 'Flash' },
-        { value: 'breathe', label: 'Breathe' },
-        { value: 'blink', label: 'Blink' },
-        { value: 'glow', label: 'Glow' },
-      ],
+      type: 'boolean',
+      prop: 'disabled',
+      initialValue: false,
+      libraryValue: false,
+    },
+    {
+      type: 'boolean',
+      prop: 'withBorder',
+      initialValue: true,
+      libraryValue: true,
+    },
+    {
+      type: 'boolean',
+      prop: 'animate',
+      initialValue: true,
+      libraryValue: true,
     },
     {
       type: 'number',
       prop: 'animationDuration',
-      initialValue: 1.5,
-      libraryValue: 1.5,
-      min: 0.5,
-      max: 5,
-      step: 0.5,
+      initialValue: 300,
+      libraryValue: 300,
+      min: 100,
+      max: 1000,
+      step: 50,
     },
     {
-      type: 'string',
-      prop: 'label',
-      initialValue: '',
-      libraryValue: '',
-    },
-    {
-      type: 'segmented',
-      prop: 'labelPosition',
-      initialValue: 'right',
-      libraryValue: 'right',
+      type: 'select',
+      prop: 'animationTimingFunction',
+      initialValue: 'ease-in-out',
+      libraryValue: 'ease-in-out',
       data: [
-        { value: 'left', label: 'Left' },
-        { value: 'right', label: 'Right' },
+        { value: 'linear', label: 'Linear' },
+        { value: 'ease', label: 'Ease' },
+        { value: 'ease-in', label: 'Ease In' },
+        { value: 'ease-out', label: 'Ease Out' },
+        { value: 'ease-in-out', label: 'Ease In Out' },
       ],
+    },
+    {
+      type: 'number',
+      prop: 'viewWidth',
+      initialValue: 200,
+      libraryValue: 200,
+      min: 100,
+      max: 400,
+      step: 20,
+    },
+    {
+      type: 'size',
+      prop: 'radius',
+      initialValue: 'sm',
+      libraryValue: 'sm',
     },
   ],
 };

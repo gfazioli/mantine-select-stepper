@@ -29,50 +29,50 @@ The SelectStepper component is fully controlled through the `value` prop. Here's
 
 <Demo data={demos.controlled} />
 
-## Colors
+## onChange handler
 
-The SelectStepper component supports all Mantine theme colors. Use the `color` prop to set the LED color:
+`onChange` is called with two arguments:
 
-<Demo data={demos.colors} />
+`value` - string value of the selected option
+`option` – selected option object
 
-## Animations
+If you prefer object format in state, use second argument of onChange handler:
 
-Add visual feedback with built-in animations. The component supports multiple animation types:
+```tsx
+import { useState } from 'react';
+import {
+  SelectStepper,
+  type ComboboxItem,
+} from '@gfazioli/mantine-select-stepper';
 
-- **pulse**: Smooth pulsing effect (default)
-- **flash**: Quick flashing
-- **breathe**: Slow breathing effect
-- **blink**: Regular blinking
-- **glow**: Glowing effect with increased intensity
+function Demo() {
+  const [value, setValue] = useState<ComboboxItem | null>({
+    value: 'vue',
+    label: 'Vue.js Framework',
+  });
 
-<Demo data={demos.animations} />
+  const data = [
+    { value: 'react', label: 'React JS' },
+    { value: 'vue', label: 'Vue.js Framework' },
+    { value: 'angular', label: 'Angular Platform' },
+  ];
 
-## Labels
-
-Add descriptive labels to your LED indicators with full customization support:
-
-<Demo data={demos.labels} />
-
-The `label` prop accepts any React node, allowing you to use custom components like badges, icons, or formatted text. Use `labelPosition` to control whether the label appears on the left or right side of the LED.
+  return (
+    <SelectStepper
+      data={data}
+      value={value ? value.value : null}
+      onChange={(_value, option) => setValue(option)}
+    />
+  );
+}
+```
 
 ## Styles API
 
 `SelectStepper` supports [Styles API](https://mantine.dev/styles/styles-api/), you can add styles to any inner element of the component with `classNames` prop. Follow [Styles API](https://mantine.dev/styles/styles-api/) documentation to learn more.
 
-You can customize the appearance of the `SelectStepper` component using the Styles API. This allows you to modify styles for various parts of the component, such as the root, select-stepper, and label.
+You can customize the appearance of the `SelectStepper` component using the Styles API. This allows you to modify styles for various parts of the component, such as the root, leftSection, rightSection, view, label, and empty.
 
 <Demo data={demos.stylesApi} />
 
 ## Use Cases
-
-### System Status Panel
-
-Monitor multiple system components with organized LED indicators:
-
-<Demo data={demos.statusPanel} />
-
-### DEFCON Alert System
-
-A fun example showing how to build a DEFCON (Defense Readiness Condition) alert system with animated LEDs:
-
-<Demo data={demos.defcon} />
