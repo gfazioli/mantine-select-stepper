@@ -224,7 +224,9 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
       if (!items[index]?.disabled) {
         return index;
       }
-      if (!loop && (index === 0 || index === len - 1)) break;
+      if (!loop && (index === 0 || index === len - 1)) {
+        break;
+      }
     }
 
     return currentIndex;
@@ -307,7 +309,6 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
         handleRightClick();
         break;
       default:
-        return;
     }
   };
 

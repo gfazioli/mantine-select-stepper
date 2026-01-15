@@ -4,20 +4,19 @@ import { MantineDemo } from '@mantinex/demo';
 const code = `
 import { SelectStepper } from '@gfazioli/mantine-select-stepper';
 
-function Demo() {
-  return (
-    <SelectStepper
-      data={['React', 'Angular', 'Vue', 'Svelte', 'Ember']}
-      defaultValue="React"
-      {{props}}
-    />
-  );
+function Demo(props: any) {
+  return <SelectStepper{{props}}
+    data={['React', 'Angular', 'Vue', 'Svelte', 'Ember']} />;
 }
 `;
 
+function Demo(props: any) {
+  return <SelectStepper data={['React', 'Angular', 'Vue', 'Svelte', 'Ember']} {...props} />;
+}
+
 export const configurator: MantineDemo = {
   type: 'configurator',
-  component: (props) => <SelectStepper data={['React', 'Angular', 'Vue', 'Svelte', 'Ember']} defaultValue="React" {...props} />,
+  component: Demo,
   code,
   centered: true,
   controls: [

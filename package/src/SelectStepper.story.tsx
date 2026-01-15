@@ -201,7 +201,16 @@ export function WithCustomWidth() {
 }
 
 export function WithOnChange() {
-  return <SelectStepper data={['Short', 'Medium Width', 'Very Long Item Name']} viewWidth={300} onChange={(value) => console.log('Selected:', value)} />;
+  return (
+    <SelectStepper
+      data={['Short', 'Medium Width', 'Very Long Item Name']}
+      viewWidth={300}
+      onChange={(value) => {
+        // eslint-disable-next-line no-console
+        console.log('Selected:', value);
+      }}
+    />
+  );
 }
 
 export function InForm() {
