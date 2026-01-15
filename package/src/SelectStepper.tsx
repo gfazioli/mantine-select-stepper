@@ -24,7 +24,7 @@ export type SelectStepperAnimationType = 'pulse' | 'flash' | 'breathe' | 'blink'
 export type SelectStepperStylesNames = 'root' | 'leftSection' | 'rightSection' | 'view' | 'scrollArea' | 'label';
 
 export type SelectStepperCssVariables = {
-  root: '--select-stepper-view-width';
+  root: '--select-stepper-view-width' | '--select-stepper-animation-duration' | '--select-stepper-animation-timing-function';
 };
 
 export type SelectStepperItem = string | ComboboxItem;
@@ -68,6 +68,15 @@ export interface SelectStepperBaseProps {
 
   /** Width of the view area (viewport) */
   viewWidth?: React.CSSProperties['width'];
+
+  /** Enable or disable scroll animation */
+  animate?: boolean;
+
+  /** Animation duration in milliseconds or CSS time value */
+  animationDuration?: number | string;
+
+  /** Animation timing function (ease, linear, ease-in, ease-out, ease-in-out, cubic-bezier, etc.) */
+  animationTimingFunction?: React.CSSProperties['transitionTimingFunction'];
 }
 
 export interface SelectStepperProps extends BoxProps, SelectStepperBaseProps, StylesApiProps<SelectStepperFactory> {}
@@ -89,12 +98,17 @@ const defaultProps: Partial<SelectStepperProps> = {
   onLeftIconClick: undefined,
   onRightIconClick: undefined,
   viewWidth: 200,
+  animate: true,
+  animationDuration: 300,
+  animationTimingFunction: 'ease-in-out',
 };
 
-const varsResolver = createVarsResolver<SelectStepperFactory>((_, { viewWidth }) => {
+const varsResolver = createVarsResolver<SelectStepperFactory>((_, { viewWidth, animationDuration, animationTimingFunction }) => {
   return {
     root: {
       '--select-stepper-view-width': typeof viewWidth === 'number' ? `${viewWidth}px` : viewWidth,
+      '--select-stepper-animation-duration': typeof animationDuration === 'number' ? `${animationDuration}ms` : animationDuration,
+      '--select-stepper-animation-timing-function': animationTimingFunction,
     },
   };
 });
@@ -114,6 +128,9 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
     disabled,
     emptyValue,
     viewWidth,
+    animate,
+    animationDuration,
+    animationTimingFunction,
 
     classNames,
     style,
@@ -151,7 +168,6 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
   });
 
   const currentIndex = items.findIndex((item) => item.value === _value);
-  const currentItem = currentIndex !== -1 ? items[currentIndex] : null;
 
   const [scrollOffset, setScrollOffset] = React.useState(0);
 
@@ -234,7 +250,7 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
           {leftIcon}
         </ActionIcon>
         <Box {...getStyles('view')}>
-          <Box {...getStyles('scrollArea')}>
+          <Box {...getStyles('scrollArea')} mod={{ animate }}>
             {items.map((item, index) => (
               <Text key={item.value} {...getStyles('label')} data-active={index === currentIndex || undefined}>
                 {item.label}

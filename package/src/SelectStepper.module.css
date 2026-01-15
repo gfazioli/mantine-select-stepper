@@ -1,6 +1,8 @@
 .root {
   --select-stepper-view-width: 200px;
   --select-stepper-scroll-offset: 0%;
+  --select-stepper-animation-duration: 300ms;
+  --select-stepper-animation-timing-function: ease-in-out;
 }
 
 .view {
@@ -11,8 +13,11 @@
 
 .scrollArea {
   display: flex;
-  transition: transform 0.3s ease-in-out;
   transform: translateX(var(--select-stepper-scroll-offset));
+}
+
+.scrollArea[data-animate='true'] {
+  transition: transform var(--select-stepper-animation-duration) var(--select-stepper-animation-timing-function);
 }
 
 .label {
