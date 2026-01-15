@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
-import { Group, Select, Stack, TextInput } from '@mantine/core';
+import { Code, Group, Select, Stack, TextInput, type ComboboxItem } from '@mantine/core';
 import { SelectStepper } from './SelectStepper';
 
 export default {
@@ -92,6 +92,44 @@ export function Controlled() {
   const [value, setValue] = useState<string | null>('Vue');
 
   return <SelectStepper data={['React', 'Vue', 'Angular']} value={value} onChange={setValue} />;
+}
+
+export function ControlledObject() {
+  const [value, setValue] = useState<ComboboxItem | null>({ value: 'vue', label: 'Vue.js Framework' });
+
+  const data = [
+    { value: 'react', label: 'React JS' },
+    { value: 'vue', label: 'Vue.js Framework' },
+    { value: 'angular', label: 'Angular Platform' },
+  ];
+
+  return <SelectStepper data={data} value={value ? value.value : null} onChange={(_value, option) => setValue(option)} />;
+}
+
+interface ComplexItem extends ComboboxItem {
+  version?: string;
+}
+
+export function ControlledObjectComplex() {
+  const [value, setValue] = useState<ComplexItem | null>({ value: 'vue', label: 'Vue.js Framework', version: '3.2.37' });
+
+  const data = [
+    { value: 'react', label: 'React JS', version: '18.2.0' },
+    { value: 'vue', label: 'Vue.js Framework', version: '3.2.37' },
+    { value: 'angular', label: 'Angular Platform', version: '13.3.0' },
+  ];
+
+  return (
+    <Stack>
+      <div>
+        Raw value:<Code>{value ? JSON.stringify(value) : 'None'}</Code>
+      </div>
+      <div>Selected value: {value ? value.label : 'None'}</div>
+      <div>Selected label: {value ? value.label : 'None'}</div>
+      <div>Extra data Version: {value && 'version' in value ? value.version : 'None'}</div>
+      <SelectStepper data={data} value={value ? value.value : null} onChange={(_value, option) => setValue(option)} />
+    </Stack>
+  );
 }
 
 export function ControlledComplex() {

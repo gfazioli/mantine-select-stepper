@@ -49,7 +49,7 @@ export interface SelectStepperBaseProps {
   emptyValue?: React.ReactNode;
 
   /** Callback when the value changes */
-  onChange?: (value: string | null) => void;
+  onChange?: (value: string | null, option: ComboboxItem) => void;
 
   /** Left icon element */
   leftIcon?: React.ReactNode;
@@ -182,11 +182,17 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
   const firstNonDisabledItem = items.find((item) => !item.disabled);
   const initialValue = defaultValue !== null && defaultValue !== undefined ? defaultValue : firstNonDisabledItem?.value || null;
 
-  const [_value, handleChange] = useUncontrolled({
+  const [_value, setValue] = useUncontrolled({
     value,
     defaultValue: initialValue,
-    onChange,
+    onChange: undefined,
   });
+
+  const handleChange = (newValue: string | null) => {
+    setValue(newValue);
+    const option = items.find((item) => item.value === newValue) || { value: newValue || '', label: newValue || '' };
+    onChange?.(newValue, option);
+  };
 
   const currentIndex = items.findIndex((item) => item.value === _value);
 
