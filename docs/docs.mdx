@@ -19,13 +19,11 @@ import '@gfazioli/mantine-select-stepper/styles.layer.css';
 
 ## Usage
 
-Explore all available props and see the component in action:
-
 <Demo data={demos.configurator} />
 
 ## Controlled
 
-The SelectStepper component is fully controlled through the `value` prop. Here's an example of controlling the LED state:
+The SelectStepper component can be fully controlled through the `value` prop. Use `onChange` handler to update the value:
 
 <Demo data={demos.controlled} />
 
@@ -33,8 +31,8 @@ The SelectStepper component is fully controlled through the `value` prop. Here's
 
 `onChange` is called with two arguments:
 
-`value` - string value of the selected option
-`option` – selected option object
+- `value` - string value of the selected option
+- `option` – selected option object
 
 If you prefer object format in state, use second argument of onChange handler:
 
@@ -67,12 +65,59 @@ function Demo() {
 }
 ```
 
+## Loop
+
+Enable infinite scrolling by setting the `loop` prop. When enabled, the stepper will wrap around to the beginning when reaching the end, and vice versa.
+
+<Demo data={demos.loop} />
+
+## Disabled items
+
+You can disable specific items in the data array. Disabled items will be skipped when navigating through the options.
+
+<Demo data={demos.disabledItems} />
+
+## Disabled state
+
+Set the `disabled` prop to disable the entire component. This will prevent any interaction with the stepper.
+
+<Demo data={demos.disabled} />
+
+## Custom icons
+
+Customize the left and right icons using the `leftIcon` and `rightIcon` props. You can use any React node as an icon.
+
+<Demo data={demos.customIcons} />
+
+## Custom width
+
+Adjust the viewport width using the `viewWidth` prop. This controls how much space is allocated for displaying the current value.
+
+<Demo data={demos.customWidth} />
+
+## With border
+
+Add a border to the component using the `withBorder` prop.
+
+<Demo data={demos.withBorder} />
+
+## Animation
+
+Control the animation behavior with the `animate`, `animationDuration`, and `animationTimingFunction` props. You can create custom timing functions for unique effects, or disable animations entirely.
+
+<Demo data={demos.animation} />
+
+## Keyboard navigation
+
+SelectStepper supports keyboard navigation:
+
+- `ArrowLeft` or `ArrowDown` - Move to previous item
+- `ArrowRight` or `ArrowUp` - Move to next item
+
+
+
 ## Styles API
 
-`SelectStepper` supports [Styles API](https://mantine.dev/styles/styles-api/), you can add styles to any inner element of the component with `classNames` prop. Follow [Styles API](https://mantine.dev/styles/styles-api/) documentation to learn more.
-
-You can customize the appearance of the `SelectStepper` component using the Styles API. This allows you to modify styles for various parts of the component, such as the root, leftSection, rightSection, view, label, and empty.
+SelectStepper supports [Styles API](https://mantine.dev/styles/styles-api/), you can add styles to any inner element of the component with `classNames` prop. Follow [Styles API](https://mantine.dev/styles/styles-api/) documentation to learn more.
 
 <Demo data={demos.stylesApi} />
-
-## Use Cases
