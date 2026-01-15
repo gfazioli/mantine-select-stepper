@@ -1,10 +1,12 @@
 export { animation } from './SelectStepper.demo.animation';
 export { configurator } from './SelectStepper.demo.configurator';
 export { controlled } from './SelectStepper.demo.controlled';
+export { customData } from './SelectStepper.demo.customData';
 export { customIcons } from './SelectStepper.demo.customIcons';
 export { customWidth } from './SelectStepper.demo.customWidth';
 export { disabled } from './SelectStepper.demo.disabled';
 export { disabledItems } from './SelectStepper.demo.disabledItems';
 export { loop } from './SelectStepper.demo.loop';
+export { renderOption } from './SelectStepper.demo.renderOption';
 export { stylesApi } from './SelectStepper.demo.stylesApi';
 export { withBorder } from './SelectStepper.demo.withBorder';

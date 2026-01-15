@@ -114,7 +114,19 @@ SelectStepper supports keyboard navigation:
 - `ArrowLeft` or `ArrowDown` - Move to previous item
 - `ArrowRight` or `ArrowUp` - Move to next item
 
+## Custom rendering
 
+### renderOption prop
+
+Use the `renderOption` prop to customize how each option is displayed. This function receives a `ComboboxItem` object and should return a React node. This is useful when you want to add additional visual elements like badges, icons, or custom formatting to your options.
+
+<Demo data={demos.renderOption} />
+
+### Custom data with extended properties
+
+You can extend the `ComboboxItem` interface to include additional properties in your data. When using the `onChange` handler, the second argument will contain the complete option object with all custom properties. This is perfect for storing metadata alongside your options.
+
+<Demo data={demos.customData} />
 
 ## Styles API
 
