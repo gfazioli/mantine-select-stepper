@@ -169,11 +169,20 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
 
   const currentIndex = items.findIndex((item) => item.value === _value);
 
-  const [scrollOffset, setScrollOffset] = React.useState(0);
+  // Track continuous scroll position for infinite loop
+  const [continuousIndex, setContinuousIndex] = React.useState(currentIndex !== -1 ? currentIndex : 0);
+  const [isTransitioning, setIsTransitioning] = React.useState(false);
 
+  // Sync continuousIndex when value changes externally (controlled mode)
   useEffect(() => {
-    setScrollOffset(-currentIndex * 100);
-  }, [currentIndex]);
+    if (currentIndex !== -1 && !isTransitioning) {
+      const validIndex = currentIndex !== -1 ? currentIndex : 0;
+      setContinuousIndex(validIndex + (loop ? items.length : 0));
+    }
+  }, [_value, items.length, loop, isTransitioning, currentIndex]);
+
+  // Calculate scroll offset based on continuous index
+  const scrollOffset = loop ? -continuousIndex * 100 : -currentIndex * 100;
 
   const canGoPrev = loop ? items.length > 1 : currentIndex > 0;
   const canGoNext = loop ? items.length > 1 : currentIndex < items.length - 1;
@@ -198,20 +207,59 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
     if (disabled || !canGoPrev) {
       return;
     }
-    // Logic for handling left click
+
+    setIsTransitioning(true);
     const nextIndex = findNextValidIndex(currentIndex, -1);
+
     if (nextIndex !== currentIndex) {
+      if (loop) {
+        // Move continuous index backward
+        setContinuousIndex((prev) => prev - 1);
+      }
       handleChange(items[nextIndex].value);
+
+      // Reset transition flag after animation
+      const duration = typeof animationDuration === 'number' ? animationDuration : 300;
+      setTimeout(() => {
+        setIsTransitioning(false);
+        // Reset to center group if needed
+        if (loop) {
+          const moduloIndex = nextIndex;
+          setContinuousIndex(items.length + moduloIndex);
+        }
+      }, duration);
+    } else {
+      setIsTransitioning(false);
     }
   };
+
   const handleRightClick = () => {
     if (disabled || !canGoNext) {
       return;
     }
-    // Logic for handling right click
+
+    setIsTransitioning(true);
     const nextIndex = findNextValidIndex(currentIndex, 1);
+
     if (nextIndex !== currentIndex) {
+      if (loop) {
+        // Move continuous index forward
+        setContinuousIndex((prev) => prev + 1);
+      }
       handleChange(items[nextIndex].value);
+
+      // Reset transition flag after animation
+      const duration = typeof animationDuration === 'number' ? animationDuration : 300;
+      setTimeout(() => {
+        setIsTransitioning(false);
+        // Reset to center group if needed
+        if (loop) {
+          const moduloIndex = nextIndex;
+          setContinuousIndex(items.length + moduloIndex);
+        }
+      }, duration);
+    } else {
+      setIsTransitioning(false);
     }
   };
 
@@ -250,13 +298,37 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
           {leftIcon}
         </ActionIcon>
         <Box {...getStyles('view')}>
-          <Box {...getStyles('scrollArea')} mod={{ animate }}>
-            {items.map((item, index) => (
-              <Text key={item.value} {...getStyles('label')} data-active={index === currentIndex || undefined}>
-                {item.label}
-              </Text>
-            ))}
-            {items.length === 0 && <Text {...getStyles('label')}>{emptyValue}</Text>}
+          <Box {...getStyles('scrollArea')} mod={{ animate: animate && isTransitioning }}>
+            {loop && items.length > 0 ? (
+              // Render 3 sets of items for infinite loop effect: [prev][current][next]
+              <>
+                {items.map((item, index) => (
+                  <Text key={`prev-${item.value}-${index}`} {...getStyles('label')}>
+                    {item.label}
+                  </Text>
+                ))}
+                {items.map((item, index) => (
+                  <Text key={`current-${item.value}-${index}`} {...getStyles('label')} data-active={index === currentIndex || undefined}>
+                    {item.label}
+                  </Text>
+                ))}
+                {items.map((item, index) => (
+                  <Text key={`next-${item.value}-${index}`} {...getStyles('label')}>
+                    {item.label}
+                  </Text>
+                ))}
+              </>
+            ) : (
+              // Normal rendering without loop
+              <>
+                {items.map((item, index) => (
+                  <Text key={item.value} {...getStyles('label')} data-active={index === currentIndex || undefined}>
+                    {item.label}
+                  </Text>
+                ))}
+                {items.length === 0 && <Text {...getStyles('label')}>{emptyValue}</Text>}
+              </>
+            )}
           </Box>
         </Box>
         <ActionIcon {...getStyles('rightSection')} disabled={disabled || !canGoNext} onClick={handleRightClick}>
