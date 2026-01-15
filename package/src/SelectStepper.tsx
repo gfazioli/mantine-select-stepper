@@ -20,10 +20,6 @@ import {
 import { useUncontrolled } from '@mantine/hooks';
 import classes from './SelectStepper.module.css';
 
-export type SelectStepperVariant = 'flat' | '3d';
-
-export type SelectStepperAnimationType = 'pulse' | 'flash' | 'breathe' | 'blink' | 'glow' | 'none';
-
 export type SelectStepperStylesNames = 'root' | 'leftSection' | 'rightSection' | 'view' | 'scrollArea' | 'label';
 
 export type SelectStepperCssVariables = {
@@ -92,6 +88,9 @@ export interface SelectStepperBaseProps {
 
   /** Adds border to the root element */
   withBorder?: boolean;
+
+  /** A function to render content of the option, replaces the default content of the option */
+  renderOption?: (item: ComboboxItem) => React.ReactNode;
 }
 
 export interface SelectStepperProps extends BoxProps, SelectStepperBaseProps, StylesApiProps<SelectStepperFactory> {}
@@ -101,7 +100,6 @@ export type SelectStepperFactory = PolymorphicFactory<{
   defaultComponent: 'div';
   defaultRef: HTMLDivElement;
   stylesNames: SelectStepperStylesNames;
-  variant: SelectStepperVariant;
   vars: SelectStepperCssVariables;
 }>;
 
@@ -152,6 +150,7 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
     radius,
     leftSectionProps,
     rightSectionProps,
+    renderOption,
 
     classNames,
     style,
@@ -331,30 +330,54 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
             {loop && items.length > 0 ? (
               // Render 3 sets of items for infinite loop effect: [prev][current][next]
               <>
-                {items.map((item, index) => (
-                  <Text key={`prev-${item.value}-${index}`} {...getStyles('label')}>
-                    {item.label}
-                  </Text>
-                ))}
-                {items.map((item, index) => (
-                  <Text key={`current-${item.value}-${index}`} {...getStyles('label')} data-active={index === currentIndex || undefined}>
-                    {item.label}
-                  </Text>
-                ))}
-                {items.map((item, index) => (
-                  <Text key={`next-${item.value}-${index}`} {...getStyles('label')}>
-                    {item.label}
-                  </Text>
-                ))}
+                {items.map((item, index) =>
+                  typeof renderOption === 'function' ? (
+                    <Box key={`prev-${item.value}-${index}`} {...getStyles('label')}>
+                      {renderOption(item)}
+                    </Box>
+                  ) : (
+                    <Text key={`prev-${item.value}-${index}`} {...getStyles('label')}>
+                      {item.label}
+                    </Text>
+                  )
+                )}
+                {items.map((item, index) =>
+                  typeof renderOption === 'function' ? (
+                    <Box key={`current-${item.value}-${index}`} {...getStyles('label')} data-active={index === currentIndex || undefined}>
+                      {renderOption(item)}
+                    </Box>
+                  ) : (
+                    <Text key={`current-${item.value}-${index}`} {...getStyles('label')} data-active={index === currentIndex || undefined}>
+                      {item.label}
+                    </Text>
+                  )
+                )}
+                {items.map((item, index) =>
+                  typeof renderOption === 'function' ? (
+                    <Box key={`next-${item.value}-${index}`} {...getStyles('label')}>
+                      {renderOption(item)}
+                    </Box>
+                  ) : (
+                    <Text key={`next-${item.value}-${index}`} {...getStyles('label')}>
+                      {item.label}
+                    </Text>
+                  )
+                )}
               </>
             ) : (
               // Normal rendering without loop
               <>
-                {items.map((item, index) => (
-                  <Text key={item.value} {...getStyles('label')} data-active={index === currentIndex || undefined}>
-                    {item.label}
-                  </Text>
-                ))}
+                {items.map((item, index) =>
+                  typeof renderOption === 'function' ? (
+                    <Box key={item.value} {...getStyles('label')} data-active={index === currentIndex || undefined}>
+                      {renderOption(item)}
+                    </Box>
+                  ) : (
+                    <Text key={item.value} {...getStyles('label')} data-active={index === currentIndex || undefined}>
+                      {item.label}
+                    </Text>
+                  )
+                )}
                 {items.length === 0 && <Text {...getStyles('label')}>{emptyValue}</Text>}
               </>
             )}

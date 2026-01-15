@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
-import { Code, Group, Select, Stack, TextInput, type ComboboxItem } from '@mantine/core';
+import { Badge, Code, Group, Select, Stack, TextInput, type ComboboxItem } from '@mantine/core';
 import { SelectStepper } from './SelectStepper';
 
 export default {
@@ -194,6 +194,24 @@ export function WithCustomAnimation() {
 
 export function WithoutAnimation() {
   return <SelectStepper data={['Instant', 'Switch', 'No Animation']} animate={false} />;
+}
+
+export function RenderOption() {
+  return (
+    <SelectStepper
+      data={['Instant', 'Switch', 'No Animation']}
+      renderOption={(item) => (
+        <Group>
+          <span>{item.label}</span>
+          <span style={{ fontSize: 12, color: '#888' }}>({item.value.length} chars)</span>
+        </Group>
+      )}
+    />
+  );
+}
+
+export function RenderOptionBadge() {
+  return <SelectStepper data={['Instant', 'Switch', 'No Animation']} renderOption={(item) => <Badge>{item.label}</Badge>} />;
 }
 
 export function WithCustomWidth() {
