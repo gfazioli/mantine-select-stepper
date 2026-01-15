@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+import { Stack } from '@mantine/core';
 import { SelectStepper } from './SelectStepper';
 
 export default {
@@ -75,6 +76,29 @@ export default {
 
 export function Usage() {
   return <SelectStepper data={['React', 'Vue', 'Angular']} />;
+}
+
+export function Controlled() {
+  const [value, setValue] = useState<string | null>('Vue');
+
+  return <SelectStepper data={['React', 'Vue', 'Angular']} value={value} onChange={setValue} />;
+}
+
+export function ControlledComplex() {
+  const [value, setValue] = useState<string | null>('vue');
+
+  const data = [
+    { value: 'react', label: 'React JS' },
+    { value: 'vue', label: 'Vue.js Framework' },
+    { value: 'angular', label: 'Angular Platform' },
+  ];
+
+  return (
+    <Stack>
+      <div>Selected value: {value}</div>
+      <SelectStepper data={data} value={value} onChange={setValue} />
+    </Stack>
+  );
 }
 
 export function WithProps(props: any) {
