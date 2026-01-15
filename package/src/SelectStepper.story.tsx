@@ -125,6 +125,17 @@ export function WithLoop() {
   return <SelectStepper data={['React', 'Vue', 'Angular']} loop />;
 }
 
+export function WithSectionProps() {
+  return (
+    <SelectStepper
+      data={['React', 'Vue', 'Angular']}
+      leftSectionProps={{
+        variant: 'light',
+      }}
+    />
+  );
+}
+
 export function WithDisabledItems() {
   return (
     <SelectStepper

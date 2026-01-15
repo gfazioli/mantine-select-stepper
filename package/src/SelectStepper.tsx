@@ -13,6 +13,7 @@ import {
   Text,
   useProps,
   useStyles,
+  type ActionIconProps,
   type ComboboxItem,
   type MantineRadius,
 } from '@mantine/core';
@@ -55,6 +56,12 @@ export interface SelectStepperBaseProps {
 
   /** Right icon element */
   rightIcon?: React.ReactNode;
+
+  /** Props spread to left icon wrapper */
+  leftSectionProps?: ActionIconProps;
+
+  /** Props spread to right icon wrapper */
+  rightSectionProps?: ActionIconProps;
 
   /** Callback when the left icon is clicked */
   onLeftIconClick?: () => void;
@@ -143,6 +150,8 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
     animationTimingFunction,
     withBorder,
     radius,
+    leftSectionProps,
+    rightSectionProps,
 
     classNames,
     style,
@@ -307,7 +316,7 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
       mod={[{ 'data-with-border': withBorder }, mod]}
     >
       <Group>
-        <ActionIcon {...getStyles('leftSection')} disabled={disabled || !canGoPrev} onClick={handleLeftClick}>
+        <ActionIcon {...getStyles('leftSection')} disabled={disabled || !canGoPrev} onClick={handleLeftClick} {...leftSectionProps}>
           {leftIcon}
         </ActionIcon>
         <Box {...getStyles('view')}>
@@ -344,7 +353,7 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
             )}
           </Box>
         </Box>
-        <ActionIcon {...getStyles('rightSection')} disabled={disabled || !canGoNext} onClick={handleRightClick}>
+        <ActionIcon {...getStyles('rightSection')} disabled={disabled || !canGoNext} onClick={handleRightClick} {...rightSectionProps}>
           {rightIcon}
         </ActionIcon>
       </Group>
