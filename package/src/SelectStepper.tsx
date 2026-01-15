@@ -320,7 +320,7 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
       onKeyDown={handleKeyDown}
       tabIndex={disabled ? -1 : 0}
       role="spinbutton"
-      mod={[{ 'data-with-border': withBorder }, mod]}
+      mod={[{ 'data-with-border': withBorder, disabled }, mod]}
     >
       <Group>
         <ActionIcon {...getStyles('leftSection')} disabled={disabled || !canGoPrev} onClick={handleLeftClick} {...leftSectionProps}>

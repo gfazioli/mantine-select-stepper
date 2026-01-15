@@ -21,6 +21,21 @@
   &:where([data-with-border]) {
     border: rem(1px) solid var(--select-stepper-border-color);
   }
+
+  &:focus-visible {
+    outline: var(--mantine-focus-ring-width, rem(2px)) solid var(--mantine-color-blue-7);
+    outline-offset: rem(2px);
+  }
+
+  &[data-disabled='true'] {
+    opacity: 0.6;
+    pointer-events: none;
+
+    .label {
+      cursor: not-allowed;
+      color: var(--mantine-color-disabled-color);
+    }
+  }
 }
 
 .view {

@@ -19,19 +19,7 @@
 
 This component is created on top of the [Mantine](https://mantine.dev/) library.
 
-The [Mantine SelectStepper](https://gfazioli.github.io/mantine-select-stepper/) component is a highly customizable LED indicator for React applications built with Mantine. It provides visual feedback for status indicators, notifications, and interactive elements with support for various colors, sizes, animations, and states.
-
-## Features
-
-- 🎨 **Theme Integration**: Full Mantine theme support with all theme colors
-- 📐 **Flexible Sizing**: Supports all Mantine sizes plus custom values
-- ✨ **Rich Animations**: Multiple animation types (pulse, flash, breathe, blink, glow)
-- 🎭 **Visual Variants**: Flat and 3D rendering styles
-- 🏷️ **Label Support**: Optional labels with configurable positioning
-- 🎛️ **Controlled State**: Full control over the LED on/off state
-- ♿ **Accessibility**: Follows WAI-ARIA best practices
-- 🎨 **Styles API**: Extensive styling customization support
-- 📦 **TypeScript**: Full type safety out of the box
+The [Mantine SelectStepper](https://gfazioli.github.io/mantine-select-stepper/) is a Mantine-based React component that provides an elegant way to select from a list of options through a stepper interface. Users can navigate forward and backward through items using action buttons, with support for keyboard navigation, infinite looping, disabled items, and smooth animations. Built with TypeScript and fully integrated with Mantine's Styles API, it offers extensive customization options including custom icons, animation timing, viewport width, and border styling.
 
 > [!note]
 >
@@ -60,7 +48,7 @@ import '@gfazioli/mantine-select-stepper/styles.css';
 import { SelectStepper } from '@gfazioli/mantine-select-stepper';
 
 function Demo() {
-  return  <SelectStepper />;
+  return  <SelectStepper data={['React', 'Vue', 'Angular']} />;
 }
 ```
 
