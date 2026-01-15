@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { IconMinus, IconPlus } from '@tabler/icons-react';
 import {
   ActionIcon,
@@ -21,10 +21,10 @@ export type SelectStepperVariant = 'flat' | '3d';
 
 export type SelectStepperAnimationType = 'pulse' | 'flash' | 'breathe' | 'blink' | 'glow' | 'none';
 
-export type SelectStepperStylesNames = 'root' | 'leftSection' | 'rightSection' | 'label';
+export type SelectStepperStylesNames = 'root' | 'leftSection' | 'rightSection' | 'view' | 'scrollArea' | 'label';
 
 export type SelectStepperCssVariables = {
-  root: never;
+  root: '--select-stepper-view-width';
 };
 
 export type SelectStepperItem = string | ComboboxItem;
@@ -65,6 +65,9 @@ export interface SelectStepperBaseProps {
 
   /** If true, the stepper will be disabled */
   disabled?: boolean;
+
+  /** Width of the view area (viewport) */
+  viewWidth?: React.CSSProperties['width'];
 }
 
 export interface SelectStepperProps extends BoxProps, SelectStepperBaseProps, StylesApiProps<SelectStepperFactory> {}
@@ -85,11 +88,14 @@ const defaultProps: Partial<SelectStepperProps> = {
   rightIcon: <IconPlus />,
   onLeftIconClick: undefined,
   onRightIconClick: undefined,
+  viewWidth: 200,
 };
 
-const varsResolver = createVarsResolver<SelectStepperFactory>((_, {}) => {
+const varsResolver = createVarsResolver<SelectStepperFactory>((_, { viewWidth }) => {
   return {
-    root: {},
+    root: {
+      '--select-stepper-view-width': typeof viewWidth === 'number' ? `${viewWidth}px` : viewWidth,
+    },
   };
 });
 
@@ -107,6 +113,7 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
     loop,
     disabled,
     emptyValue,
+    viewWidth,
 
     classNames,
     style,
@@ -145,6 +152,12 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
 
   const currentIndex = items.findIndex((item) => item.value === _value);
   const currentItem = currentIndex !== -1 ? items[currentIndex] : null;
+
+  const [scrollOffset, setScrollOffset] = React.useState(0);
+
+  useEffect(() => {
+    setScrollOffset(-currentIndex * 100);
+  }, [currentIndex]);
 
   const canGoPrev = loop ? items.length > 1 : currentIndex > 0;
   const canGoNext = loop ? items.length > 1 : currentIndex < items.length - 1;
@@ -208,12 +221,21 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
   };
 
   return (
-    <Box ref={ref} {...getStyles('root')} {...others}>
+    <Box ref={ref} {...getStyles('root', { style: { '--select-stepper-scroll-offset': `${scrollOffset}%` } as React.CSSProperties })} {...others}>
       <Group onKeyDown={handleKeyDown}>
         <ActionIcon {...getStyles('leftSection')} disabled={disabled || !canGoPrev} onClick={handleLeftClick}>
           {leftIcon}
         </ActionIcon>
-        <Text {...getStyles('label')}>{currentItem ? currentItem.label : emptyValue}</Text>
+        <Box {...getStyles('view')}>
+          <Box {...getStyles('scrollArea')}>
+            {items.map((item, index) => (
+              <Text key={item.value} {...getStyles('label')} data-active={index === currentIndex || undefined}>
+                {item.label}
+              </Text>
+            ))}
+            {items.length === 0 && <Text {...getStyles('label')}>{emptyValue}</Text>}
+          </Box>
+        </Box>
         <ActionIcon {...getStyles('rightSection')} disabled={disabled || !canGoNext} onClick={handleRightClick}>
           {rightIcon}
         </ActionIcon>

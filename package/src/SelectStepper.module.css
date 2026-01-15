@@ -1,2 +1,26 @@
 .root {
+  --select-stepper-view-width: 200px;
+  --select-stepper-scroll-offset: 0%;
+}
+
+.view {
+  width: var(--select-stepper-view-width);
+  overflow: hidden;
+  position: relative;
+}
+
+.scrollArea {
+  display: flex;
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(var(--select-stepper-scroll-offset));
+}
+
+.label {
+  min-width: var(--select-stepper-view-width);
+  width: var(--select-stepper-view-width);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
