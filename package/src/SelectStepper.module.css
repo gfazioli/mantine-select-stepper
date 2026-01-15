@@ -3,6 +3,24 @@
   --select-stepper-scroll-offset: 0%;
   --select-stepper-animation-duration: 300ms;
   --select-stepper-animation-timing-function: ease-in-out;
+
+  border-radius: var(--select-stepper-radius, var(--mantine-radius-default));
+  position: relative;
+  padding: 3px;
+  display: inline-flex;
+  max-width: max-content;
+
+  @mixin light {
+    --select-stepper-border-color: var(--mantine-color-gray-3);
+  }
+
+  @mixin dark {
+    --select-stepper-border-color: var(--mantine-color-dark-4);
+  }
+
+  &:where([data-with-border]) {
+    border: rem(1px) solid var(--select-stepper-border-color);
+  }
 }
 
 .view {

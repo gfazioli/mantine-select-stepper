@@ -5,6 +5,7 @@ import {
   Box,
   BoxProps,
   createVarsResolver,
+  getRadius,
   Group,
   PolymorphicFactory,
   polymorphicFactory,
@@ -13,6 +14,7 @@ import {
   useProps,
   useStyles,
   type ComboboxItem,
+  type MantineRadius,
 } from '@mantine/core';
 import { useUncontrolled } from '@mantine/hooks';
 import classes from './SelectStepper.module.css';
@@ -24,7 +26,7 @@ export type SelectStepperAnimationType = 'pulse' | 'flash' | 'breathe' | 'blink'
 export type SelectStepperStylesNames = 'root' | 'leftSection' | 'rightSection' | 'view' | 'scrollArea' | 'label';
 
 export type SelectStepperCssVariables = {
-  root: '--select-stepper-view-width' | '--select-stepper-animation-duration' | '--select-stepper-animation-timing-function';
+  root: '--select-stepper-view-width' | '--select-stepper-animation-duration' | '--select-stepper-animation-timing-function' | '--select-stepper-radius';
 };
 
 export type SelectStepperItem = string | ComboboxItem;
@@ -77,6 +79,12 @@ export interface SelectStepperBaseProps {
 
   /** Animation timing function (ease, linear, ease-in, ease-out, ease-in-out, cubic-bezier, etc.) */
   animationTimingFunction?: React.CSSProperties['transitionTimingFunction'];
+
+  /** Key of `theme.radius` or any valid CSS value to set border-radius, numbers are converted to rem @default `theme.defaultRadius` */
+  radius?: MantineRadius;
+
+  /** Adds border to the root element */
+  withBorder?: boolean;
 }
 
 export interface SelectStepperProps extends BoxProps, SelectStepperBaseProps, StylesApiProps<SelectStepperFactory> {}
@@ -101,11 +109,13 @@ const defaultProps: Partial<SelectStepperProps> = {
   animate: true,
   animationDuration: 300,
   animationTimingFunction: 'ease-in-out',
+  withBorder: true,
 };
 
-const varsResolver = createVarsResolver<SelectStepperFactory>((_, { viewWidth, animationDuration, animationTimingFunction }) => {
+const varsResolver = createVarsResolver<SelectStepperFactory>((_, { viewWidth, animationDuration, animationTimingFunction, radius }) => {
   return {
     root: {
+      '--select-stepper-radius': radius === undefined ? undefined : getRadius(radius),
       '--select-stepper-view-width': typeof viewWidth === 'number' ? `${viewWidth}px` : viewWidth,
       '--select-stepper-animation-duration': typeof animationDuration === 'number' ? `${animationDuration}ms` : animationDuration,
       '--select-stepper-animation-timing-function': animationTimingFunction,
@@ -131,6 +141,8 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
     animate,
     animationDuration,
     animationTimingFunction,
+    withBorder,
+    radius,
 
     classNames,
     style,
@@ -292,6 +304,7 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
       onKeyDown={handleKeyDown}
       tabIndex={disabled ? -1 : 0}
       role="spinbutton"
+      mod={[{ 'data-with-border': withBorder }, mod]}
     >
       <Group>
         <ActionIcon {...getStyles('leftSection')} disabled={disabled || !canGoPrev} onClick={handleLeftClick}>

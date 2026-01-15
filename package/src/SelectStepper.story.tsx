@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
-import { Stack } from '@mantine/core';
+import { Group, Select, Stack, TextInput } from '@mantine/core';
 import { SelectStepper } from './SelectStepper';
 
 export default {
@@ -16,6 +16,8 @@ export default {
     animationDuration: 300,
     animationTimingFunction: 'ease-in-out',
     emptyValue: 'No selection',
+    withBorder: false,
+    radius: undefined,
   },
   argTypes: {
     data: {
@@ -42,8 +44,16 @@ export default {
       control: 'boolean',
       description: 'Disable the stepper',
     },
+    withBorder: {
+      control: 'boolean',
+      description: 'Add border to the stepper',
+    },
+    radius: {
+      control: { type: 'range', min: 0, max: 256, step: 1 },
+      description: 'Border radius of the stepper',
+    },
     viewWidth: {
-      control: { type: 'range', min: 100, max: 400, step: 10 },
+      control: { type: 'range', min: 16, max: 1024, step: 10 },
       description: 'Width of the viewport',
     },
     animate: {
@@ -143,4 +153,25 @@ export function WithCustomWidth() {
 
 export function WithOnChange() {
   return <SelectStepper data={['Short', 'Medium Width', 'Very Long Item Name']} viewWidth={300} onChange={(value) => console.log('Selected:', value)} />;
+}
+
+export function InForm() {
+  return (
+    <Stack>
+      <SelectStepper data={['React', 'Vue', 'Angular']} withBorder />
+      <TextInput placeholder="Your name" />
+      <Select data={['React', 'Vue', 'Angular']} placeholder="Select your favorite framework" />
+
+      <Group>
+        <Select data={['React', 'Vue', 'Angular']} placeholder="Select your favorite framework" />
+        <TextInput placeholder="Your name" />
+      </Group>
+
+      <Group>
+        <SelectStepper data={['React', 'Vue', 'Angular']} withBorder />
+        <Select data={['React', 'Vue', 'Angular']} placeholder="Select your favorite framework" />
+        <TextInput placeholder="Your name" />
+      </Group>
+    </Stack>
+  );
 }
