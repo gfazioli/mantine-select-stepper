@@ -8,13 +8,25 @@ import { data } from './data';
 
 function Demo() {
   return (
-    <SelectStepper{{props}}/>
+    <SelectStepper{{props}}
+      label="Hello"
+      description="This is a description"
+      error="This is an error"
+    />
   );
 }
 `;
 
 function Demo(props: any) {
-  return <SelectStepper {...props} data={['Hello']} />;
+  return (
+    <SelectStepper
+      {...props}
+      data={['Hello']}
+      label="Hello"
+      description="This is a description"
+      error="This is an error"
+    />
+  );
 }
 
 export const stylesApi: MantineDemo = {

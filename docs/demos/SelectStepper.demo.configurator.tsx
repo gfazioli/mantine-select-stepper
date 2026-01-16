@@ -21,6 +21,24 @@ export const configurator: MantineDemo = {
   centered: true,
   controls: [
     {
+      type: 'string',
+      prop: 'label',
+      initialValue: 'Select framework',
+      libraryValue: '',
+    },
+    {
+      type: 'string',
+      prop: 'description',
+      initialValue: 'This is a description',
+      libraryValue: '',
+    },
+    {
+      type: 'string',
+      prop: 'error',
+      initialValue: '',
+      libraryValue: '',
+    },
+    {
       type: 'boolean',
       prop: 'loop',
       initialValue: false,

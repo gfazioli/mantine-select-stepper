@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import { Badge, Code, Group, Select, Stack, TextInput, type ComboboxItem } from '@mantine/core';
 import { SelectStepper } from './SelectStepper';
+import classes from './Story.module.css';
 
 export default {
   title: 'Components/SelectStepper',
@@ -118,6 +119,32 @@ export function InputWrapper() {
     <SelectStepper
       label="Select your favorite framework"
       description="Use the stepper to choose one of the options"
+      styles={{
+        label: { color: 'blue' },
+        description: { fontStyle: 'italic' },
+        error: { color: 'red', fontWeight: 'bold' },
+      }}
+      data={['React', 'Vue', 'Angular']}
+    />
+  );
+}
+
+export function WithClasses() {
+  return (
+    <SelectStepper
+      classNames={classes}
+      label="Select your favorite framework"
+      description="Use the stepper to choose one of the options"
+      data={['React', 'Vue', 'Angular']}
+    />
+  );
+}
+
+export function InputWrapperOrder() {
+  return (
+    <SelectStepper
+      label="Select your favorite framework"
+      description="Use the stepper to choose one of the options"
       inputWrapperOrder={['description', 'input', 'label', 'error']}
       data={['React', 'Vue', 'Angular']}
     />
@@ -129,8 +156,12 @@ export function Uncontrolled() {
 
   return (
     <Stack>
-      <div>Selected value: {value}</div>
-      <SelectStepper data={['React', 'Vue', 'Angular']} defaultValue="Vue" onChange={setValue} />
+      <SelectStepper
+        label={`Selected value: ${value}`}
+        data={['React', 'Vue', 'Angular']}
+        defaultValue="Vue"
+        onChange={setValue}
+      />
     </Stack>
   );
 }

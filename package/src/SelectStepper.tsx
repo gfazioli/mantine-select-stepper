@@ -19,7 +19,7 @@ import {
   type ComboboxItem,
   type MantineRadius,
 } from '@mantine/core';
-import { useUncontrolled } from '@mantine/hooks';
+import { useId, useUncontrolled } from '@mantine/hooks';
 import { getInputOffsets } from './get-input-offsets/get-input-offsets';
 import classes from './SelectStepper.module.css';
 
@@ -30,7 +30,10 @@ export type SelectStepperStylesNames =
   | 'rightSection'
   | 'view'
   | 'scrollArea'
-  | 'label';
+  | 'content'
+  | 'label'
+  | 'description'
+  | 'error';
 
 export type SelectStepperCssVariables = {
   root:
@@ -38,6 +41,7 @@ export type SelectStepperCssVariables = {
     | '--select-stepper-animation-duration'
     | '--select-stepper-animation-timing-function'
     | '--select-stepper-radius';
+  wrapper: '--select-stepper-margin-top' | '--select-stepper-margin-bottom';
 };
 
 export type SelectStepperItem = string | ComboboxItem;
@@ -377,7 +381,7 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
   const renderItem = useMemo(
     () => (item: ComboboxItem, keyPrefix: string, index: number, isActive?: boolean) => {
       const key = `${keyPrefix}-${item.value}-${index}`;
-      const labelProps = getStyles('label');
+      const labelProps = getStyles('content');
       const activeProps = isActive ? { 'data-active': true } : {};
 
       if (typeof renderOption === 'function') {
@@ -397,8 +401,10 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
     [renderOption, getStyles]
   );
 
+  const uuid = useId(id);
+
   const wrapperProps = {
-    id,
+    id: uuid,
     label,
     description,
     required,
@@ -409,11 +415,16 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
     errorProps,
     labelElement,
     inputWrapperOrder,
+    classNames: classNames as unknown,
+    styles: styles as unknown,
+    unstyled,
+    style: style as unknown,
   };
 
   return (
     <Box ref={ref} {...getStyles('root')}>
       <Input.Wrapper {...wrapperProps}>
+        <input type="hidden" value={_value || ''} id={uuid} />
         <Box
           {...getStyles('wrapper', {
             style: { '--select-stepper-scroll-offset': `${scrollOffset}%` } as React.CSSProperties,
@@ -452,9 +463,9 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
                     )}
                     {items.length === 0 &&
                       (typeof emptyValue === 'string' || typeof emptyValue === 'number' ? (
-                        <Text {...getStyles('label')}>{emptyValue}</Text>
+                        <Text {...getStyles('content')}>{emptyValue}</Text>
                       ) : (
-                        <Box {...getStyles('label')}>{emptyValue}</Box>
+                        <Box {...getStyles('content')}>{emptyValue}</Box>
                       ))}
                   </>
                 )}

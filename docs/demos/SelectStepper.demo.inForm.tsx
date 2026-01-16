@@ -39,7 +39,7 @@ function Demo() {
     <Stack>
       <TextInput placeholder="Server application" label="Name" />
 
-      <Group grow>
+      <Group>
         <SelectStepper data={['Junior', 'Mid', 'Senior']} />
         <TextInput placeholder="Years" />
       </Group>

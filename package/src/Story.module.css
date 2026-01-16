@@ -1,0 +1,12 @@
+.label {
+  color: violet;
+}
+
+.description {
+  font-style: italic;
+}
+
+.error {
+  color: var(--mantine-color-violet-6);
+  font-weight: bold;
+}

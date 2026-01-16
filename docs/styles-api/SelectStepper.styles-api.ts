@@ -4,11 +4,15 @@ import type { StylesApiData } from '../components/styles-api.types';
 export const SelectStepperStylesApi: StylesApiData<SelectStepperFactory> = {
   selectors: {
     root: 'Root element',
+    wrapper: 'Wrapper element containing the stepper controls',
     leftSection: 'Left action icon wrapper (decrement button)',
     rightSection: 'Right action icon wrapper (increment button)',
     view: 'Viewport container that shows the current value',
     scrollArea: 'Scrollable area containing all labels',
-    label: 'Individual label element for each item',
+    content: 'Individual label element for each item',
+    label: 'Label element',
+    description: 'Description displayed below the label',
+    error: 'Error message displayed below the label',
   },
 
   vars: {
@@ -18,6 +22,10 @@ export const SelectStepperStylesApi: StylesApiData<SelectStepperFactory> = {
       '--select-stepper-animation-timing-function':
         'Controls the timing function for scroll animations',
       '--select-stepper-radius': 'Controls the border radius',
+    },
+    wrapper: {
+      '--select-stepper-margin-top': 'Controls the top margin of the wrapper',
+      '--select-stepper-margin-bottom': 'Controls the bottom margin of the wrapper',
     },
   },
 

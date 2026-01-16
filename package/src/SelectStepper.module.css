@@ -60,7 +60,7 @@
     var(--select-stepper-animation-timing-function);
 }
 
-.label {
+.content {
   min-width: var(--select-stepper-view-width);
   width: var(--select-stepper-view-width);
   text-align: center;
