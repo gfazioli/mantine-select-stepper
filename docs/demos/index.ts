@@ -6,6 +6,7 @@ export { customIcons } from './SelectStepper.demo.customIcons';
 export { customWidth } from './SelectStepper.demo.customWidth';
 export { disabled } from './SelectStepper.demo.disabled';
 export { disabledItems } from './SelectStepper.demo.disabledItems';
+export { inForm } from './SelectStepper.demo.inForm';
 export { loop } from './SelectStepper.demo.loop';
 export { renderOption } from './SelectStepper.demo.renderOption';
 export { stylesApi } from './SelectStepper.demo.stylesApi';

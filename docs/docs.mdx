@@ -133,3 +133,32 @@ You can extend the `ComboboxItem` interface to include additional properties in 
 SelectStepper supports [Styles API](https://mantine.dev/styles/styles-api/), you can add styles to any inner element of the component with `classNames` prop. Follow [Styles API](https://mantine.dev/styles/styles-api/) documentation to learn more.
 
 <Demo data={demos.stylesApi} />
+
+## Use in forms
+
+SelectStepper integrates seamlessly with other Mantine form components. It works well alongside inputs, selects, and other form controls, making it perfect for multi-step forms or configuration panels.
+
+<Demo data={demos.inForm} />
+
+## Use cases
+
+SelectStepper is particularly useful in scenarios where you have a limited set of sequential options and want to provide an intuitive navigation experience:
+
+- **Settings and Preferences**: Choose between predefined options like theme modes (Light/Dark/Auto), text sizes (Small/Medium/Large), or quality levels (Low/Medium/High)
+- **Step-by-step Wizards**: Navigate through sequential steps in a form or configuration process
+- **Rating Systems**: Select ratings or levels (Beginner/Intermediate/Advanced, or 1-5 stars)
+- **Time Selection**: Choose between time slots, hours, or predefined time intervals
+- **Difficulty Levels**: Select game difficulty, exercise intensity, or skill levels
+- **Priority Selection**: Choose task priorities (Low/Medium/High/Critical)
+- **Size Selection**: Pick product sizes (XS/S/M/L/XL) in e-commerce applications
+- **View Modes**: Switch between different view layouts (List/Grid/Table)
+- **Playback Speed**: Control media playback speed (0.5x/1x/1.5x/2x)
+- **Zoom Levels**: Select predefined zoom percentages (50%/75%/100%/125%/150%)
+
+The component is especially effective when:
+
+- The number of options is relatively small (typically 3-10 items)
+- Options have a natural sequential order
+- Users benefit from seeing the current selection prominently
+- Space is limited and a traditional select dropdown would be too large
+- You want to encourage exploration of available options through keyboard or button navigation
