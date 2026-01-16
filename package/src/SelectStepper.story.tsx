@@ -88,6 +88,17 @@ export function Usage() {
   return <SelectStepper data={['React', 'Vue', 'Angular']} />;
 }
 
+export function Uncontrolled() {
+  const [value, setValue] = useState<string | null>('Vue');
+
+  return (
+    <Stack>
+      <div>Selected value: {value}</div>
+      <SelectStepper data={['React', 'Vue', 'Angular']} defaultValue="Vue" onChange={setValue} />
+    </Stack>
+  );
+}
+
 export function Controlled() {
   const [value, setValue] = useState<string | null>('Vue');
 
