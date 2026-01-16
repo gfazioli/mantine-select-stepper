@@ -325,7 +325,12 @@ export function RenderOptionBadge() {
 }
 
 export function WithCustomWidth() {
-  return <SelectStepper data={['Short', 'Medium Width', 'Very Long Item Name']} viewWidth={300} />;
+  return (
+    <Stack>
+      <SelectStepper data={['Short', 'Medium Width', 'Very Long Item Name']} viewWidth={300} />
+      <SelectStepper data={['Short', 'Medium Width', 'Very Long Item Name']} viewWidth={800} />
+    </Stack>
+  );
 }
 
 export function WithOnChange() {

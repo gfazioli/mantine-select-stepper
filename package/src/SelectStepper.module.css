@@ -1,9 +1,9 @@
 .root {
+  --select-stepper-view-width: 200px;
   position: relative;
 }
 
 .wrapper {
-  --select-stepper-view-width: 200px;
   --select-stepper-scroll-offset: 0%;
   --select-stepper-animation-duration: 300ms;
   --select-stepper-animation-timing-function: ease-in-out;

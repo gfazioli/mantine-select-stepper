@@ -1,5 +1,5 @@
 import { SelectStepper } from '@gfazioli/mantine-select-stepper';
-import { Group, Stack, TextInput } from '@mantine/core';
+import { Flex, Group, Stack, TextInput } from '@mantine/core';
 import { MantineDemo } from '@mantinex/demo';
 
 const code = `
@@ -39,8 +39,10 @@ function Demo() {
     <Stack>
       <TextInput placeholder="Server application" label="Name" />
 
-      <Group>
-        <SelectStepper data={['Junior', 'Mid', 'Senior']} />
+      <Group grow>
+        <Flex>
+          <SelectStepper viewWidth={50} data={['16GB', '32GB', '64GB']} label="Ram" />
+        </Flex>
         <TextInput placeholder="Years" />
       </Group>
     </Stack>

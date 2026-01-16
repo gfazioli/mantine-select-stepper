@@ -141,7 +141,7 @@ const defaultProps: Partial<SelectStepperProps> = {
   rightIcon: <IconPlus />,
   onLeftIconClick: undefined,
   onRightIconClick: undefined,
-  viewWidth: 200,
+  viewWidth: 800,
   animate: true,
   animationDuration: 300,
   animationTimingFunction: 'ease-in-out',
