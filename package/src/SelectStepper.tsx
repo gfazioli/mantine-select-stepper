@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { IconMinus, IconPlus } from '@tabler/icons-react';
 import {
   ActionIcon,
@@ -202,8 +202,7 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
   // Sync continuousIndex when value changes externally (controlled mode)
   useEffect(() => {
     if (currentIndex !== -1 && !isTransitioning) {
-      const validIndex = currentIndex !== -1 ? currentIndex : 0;
-      setContinuousIndex(validIndex + (loop ? items.length : 0));
+      setContinuousIndex(currentIndex + (loop ? items.length : 0));
     }
   }, [_value, items.length, loop, isTransitioning, currentIndex]);
 
@@ -231,29 +230,39 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
     return currentIndex;
   };
 
-  const handleLeftClick = () => {
-    if (disabled || !canGoPrev) {
+  const timeoutRef = useRef<number | undefined>(undefined);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
+  const handleNavigation = (direction: -1 | 1) => {
+    const canNavigate = direction === -1 ? canGoPrev : canGoNext;
+    if (disabled || !canNavigate) {
       return;
     }
 
     setIsTransitioning(true);
-    const nextIndex = findNextValidIndex(currentIndex, -1);
+    const nextIndex = findNextValidIndex(currentIndex, direction);
 
     if (nextIndex !== currentIndex) {
       if (loop) {
-        // Move continuous index backward
-        setContinuousIndex((prev) => prev - 1);
+        setContinuousIndex((prev) => prev + direction);
       }
       handleChange(items[nextIndex].value);
 
       // Reset transition flag after animation
       const duration = typeof animationDuration === 'number' ? animationDuration : 300;
-      setTimeout(() => {
+      timeoutRef.current = window.setTimeout(() => {
         setIsTransitioning(false);
         // Reset to center group if needed
         if (loop) {
-          const moduloIndex = nextIndex;
-          setContinuousIndex(items.length + moduloIndex);
+          setContinuousIndex(items.length + nextIndex);
         }
       }, duration);
     } else {
@@ -261,35 +270,8 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
     }
   };
 
-  const handleRightClick = () => {
-    if (disabled || !canGoNext) {
-      return;
-    }
-
-    setIsTransitioning(true);
-    const nextIndex = findNextValidIndex(currentIndex, 1);
-
-    if (nextIndex !== currentIndex) {
-      if (loop) {
-        // Move continuous index forward
-        setContinuousIndex((prev) => prev + 1);
-      }
-      handleChange(items[nextIndex].value);
-
-      // Reset transition flag after animation
-      const duration = typeof animationDuration === 'number' ? animationDuration : 300;
-      setTimeout(() => {
-        setIsTransitioning(false);
-        // Reset to center group if needed
-        if (loop) {
-          const moduloIndex = nextIndex;
-          setContinuousIndex(items.length + moduloIndex);
-        }
-      }, duration);
-    } else {
-      setIsTransitioning(false);
-    }
-  };
+  const handleLeftClick = () => handleNavigation(-1);
+  const handleRightClick = () => handleNavigation(1);
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (disabled) {
@@ -311,6 +293,30 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
     }
   };
 
+  // Memoized function to render a single item
+  const renderItem = useMemo(
+    () => (item: ComboboxItem, keyPrefix: string, index: number, isActive?: boolean) => {
+      const key = `${keyPrefix}-${item.value}-${index}`;
+      const labelProps = getStyles('label');
+      const activeProps = isActive ? { 'data-active': true } : {};
+
+      if (typeof renderOption === 'function') {
+        return (
+          <Box key={key} {...labelProps} {...activeProps}>
+            {renderOption(item)}
+          </Box>
+        );
+      }
+
+      return (
+        <Text key={key} {...labelProps} {...activeProps}>
+          {item.label}
+        </Text>
+      );
+    },
+    [renderOption, getStyles]
+  );
+
   return (
     <Box
       ref={ref}
@@ -330,55 +336,20 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
             {loop && items.length > 0 ? (
               // Render 3 sets of items for infinite loop effect: [prev][current][next]
               <>
-                {items.map((item, index) =>
-                  typeof renderOption === 'function' ? (
-                    <Box key={`prev-${item.value}-${index}`} {...getStyles('label')}>
-                      {renderOption(item)}
-                    </Box>
-                  ) : (
-                    <Text key={`prev-${item.value}-${index}`} {...getStyles('label')}>
-                      {item.label}
-                    </Text>
-                  )
-                )}
-                {items.map((item, index) =>
-                  typeof renderOption === 'function' ? (
-                    <Box key={`current-${item.value}-${index}`} {...getStyles('label')} data-active={index === currentIndex || undefined}>
-                      {renderOption(item)}
-                    </Box>
-                  ) : (
-                    <Text key={`current-${item.value}-${index}`} {...getStyles('label')} data-active={index === currentIndex || undefined}>
-                      {item.label}
-                    </Text>
-                  )
-                )}
-                {items.map((item, index) =>
-                  typeof renderOption === 'function' ? (
-                    <Box key={`next-${item.value}-${index}`} {...getStyles('label')}>
-                      {renderOption(item)}
-                    </Box>
-                  ) : (
-                    <Text key={`next-${item.value}-${index}`} {...getStyles('label')}>
-                      {item.label}
-                    </Text>
-                  )
-                )}
+                {items.map((item, index) => renderItem(item, 'prev', index))}
+                {items.map((item, index) => renderItem(item, 'current', index, index === currentIndex))}
+                {items.map((item, index) => renderItem(item, 'next', index))}
               </>
             ) : (
               // Normal rendering without loop
               <>
-                {items.map((item, index) =>
-                  typeof renderOption === 'function' ? (
-                    <Box key={item.value} {...getStyles('label')} data-active={index === currentIndex || undefined}>
-                      {renderOption(item)}
-                    </Box>
+                {items.map((item, index) => renderItem(item, 'item', index, index === currentIndex))}
+                {items.length === 0 &&
+                  (typeof emptyValue === 'string' || typeof emptyValue === 'number' ? (
+                    <Text {...getStyles('label')}>{emptyValue}</Text>
                   ) : (
-                    <Text key={item.value} {...getStyles('label')} data-active={index === currentIndex || undefined}>
-                      {item.label}
-                    </Text>
-                  )
-                )}
-                {items.length === 0 && <Text {...getStyles('label')}>{emptyValue}</Text>}
+                    <Box {...getStyles('label')}>{emptyValue}</Box>
+                  ))}
               </>
             )}
           </Box>
