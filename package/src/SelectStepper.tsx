@@ -7,28 +7,44 @@ import {
   createVarsResolver,
   getRadius,
   Group,
+  Input,
   PolymorphicFactory,
   polymorphicFactory,
   StylesApiProps,
   Text,
   useProps,
   useStyles,
+  type __InputWrapperProps,
   type ActionIconProps,
   type ComboboxItem,
   type MantineRadius,
 } from '@mantine/core';
 import { useUncontrolled } from '@mantine/hooks';
+import { getInputOffsets } from './get-input-offsets/get-input-offsets';
 import classes from './SelectStepper.module.css';
 
-export type SelectStepperStylesNames = 'root' | 'leftSection' | 'rightSection' | 'view' | 'scrollArea' | 'label';
+export type SelectStepperStylesNames =
+  | 'root'
+  | 'wrapper'
+  | 'leftSection'
+  | 'rightSection'
+  | 'view'
+  | 'scrollArea'
+  | 'label';
 
 export type SelectStepperCssVariables = {
-  root: '--select-stepper-view-width' | '--select-stepper-animation-duration' | '--select-stepper-animation-timing-function' | '--select-stepper-radius';
+  root:
+    | '--select-stepper-view-width'
+    | '--select-stepper-animation-duration'
+    | '--select-stepper-animation-timing-function'
+    | '--select-stepper-radius';
 };
 
 export type SelectStepperItem = string | ComboboxItem;
 
-function normalizeData(data: SelectStepperItem[]): { value: string; label: string; disabled?: boolean }[] {
+function normalizeData(
+  data: SelectStepperItem[]
+): { value: string; label: string; disabled?: boolean }[] {
   return data.map((item) => (typeof item === 'string' ? { value: item, label: item } : item));
 }
 
@@ -91,9 +107,20 @@ export interface SelectStepperBaseProps {
 
   /** A function to render content of the option, replaces the default content of the option */
   renderOption?: (item: ComboboxItem) => React.ReactNode;
+
+  /** Input element id */
+  id?: string;
+
+  /** `Input.Label` root element, `'label'` by default */
+  labelElement?: 'label' | 'div';
 }
 
-export interface SelectStepperProps extends BoxProps, SelectStepperBaseProps, StylesApiProps<SelectStepperFactory> {}
+export interface SelectStepperProps
+  extends
+    BoxProps,
+    __InputWrapperProps,
+    SelectStepperBaseProps,
+    StylesApiProps<SelectStepperFactory> {}
 
 export type SelectStepperFactory = PolymorphicFactory<{
   props: SelectStepperProps;
@@ -115,18 +142,50 @@ const defaultProps: Partial<SelectStepperProps> = {
   animationDuration: 300,
   animationTimingFunction: 'ease-in-out',
   withBorder: true,
+  required: false,
+  withAsterisk: false,
+  labelElement: 'label',
+  inputWrapperOrder: ['label', 'description', 'input', 'error'],
 };
 
-const varsResolver = createVarsResolver<SelectStepperFactory>((_, { viewWidth, animationDuration, animationTimingFunction, radius }) => {
-  return {
-    root: {
-      '--select-stepper-radius': radius === undefined ? undefined : getRadius(radius),
-      '--select-stepper-view-width': typeof viewWidth === 'number' ? `${viewWidth}px` : viewWidth,
-      '--select-stepper-animation-duration': typeof animationDuration === 'number' ? `${animationDuration}ms` : animationDuration,
-      '--select-stepper-animation-timing-function': animationTimingFunction,
-    },
-  };
-});
+const varsResolver = createVarsResolver<SelectStepperFactory>(
+  (
+    _,
+    {
+      viewWidth,
+      animationDuration,
+      animationTimingFunction,
+      radius,
+      description,
+      error,
+      inputWrapperOrder,
+    }
+  ) => {
+    const hasError = !!error && typeof error !== 'boolean';
+    const hasDescription = !!description;
+    const { offsetBottom, offsetTop } = getInputOffsets(inputWrapperOrder, {
+      hasDescription,
+      hasError,
+    });
+    return {
+      root: {
+        '--select-stepper-radius': radius === undefined ? undefined : getRadius(radius),
+        '--select-stepper-view-width': typeof viewWidth === 'number' ? `${viewWidth}px` : viewWidth,
+        '--select-stepper-animation-duration':
+          typeof animationDuration === 'number' ? `${animationDuration}ms` : animationDuration,
+        '--select-stepper-animation-timing-function': animationTimingFunction,
+      },
+      wrapper: {
+        '--select-stepper-margin-top': offsetTop
+          ? 'calc(var(--mantine-spacing-xs) / 2)'
+          : undefined,
+        '--select-stepper-margin-bottom': offsetBottom
+          ? 'calc(var(--mantine-spacing-xs) / 2)'
+          : undefined,
+      },
+    };
+  }
+);
 
 export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, ref) => {
   const props = useProps('SelectStepper', defaultProps, _props);
@@ -151,6 +210,17 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
     leftSectionProps,
     rightSectionProps,
     renderOption,
+    label,
+    description,
+    required,
+    withAsterisk,
+    labelProps,
+    descriptionProps,
+    errorProps,
+    id,
+    labelElement,
+    error,
+    inputWrapperOrder,
 
     classNames,
     style,
@@ -179,7 +249,10 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
 
   // If neither value nor defaultValue are set, use the first non-disabled item
   const firstNonDisabledItem = items.find((item) => !item.disabled);
-  const initialValue = defaultValue !== null && defaultValue !== undefined ? defaultValue : firstNonDisabledItem?.value || null;
+  const initialValue =
+    defaultValue !== null && defaultValue !== undefined
+      ? defaultValue
+      : firstNonDisabledItem?.value || null;
 
   const [_value, setValue] = useUncontrolled({
     value,
@@ -189,14 +262,19 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
 
   const handleChange = (newValue: string | null) => {
     setValue(newValue);
-    const option = items.find((item) => item.value === newValue) || { value: newValue || '', label: newValue || '' };
+    const option = items.find((item) => item.value === newValue) || {
+      value: newValue || '',
+      label: newValue || '',
+    };
     onChange?.(newValue, option);
   };
 
   const currentIndex = items.findIndex((item) => item.value === _value);
 
   // Track continuous scroll position for infinite loop
-  const [continuousIndex, setContinuousIndex] = React.useState(currentIndex !== -1 ? currentIndex : 0);
+  const [continuousIndex, setContinuousIndex] = React.useState(
+    currentIndex !== -1 ? currentIndex : 0
+  );
   const [isTransitioning, setIsTransitioning] = React.useState(false);
 
   // Sync continuousIndex when value changes externally (controlled mode)
@@ -217,7 +295,9 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
     let index = startIndex;
 
     for (let i = 0; i < len; i++) {
-      index = loop ? (index + direction + len) % len : Math.max(0, Math.min(len - 1, index + direction));
+      index = loop
+        ? (index + direction + len) % len
+        : Math.max(0, Math.min(len - 1, index + direction));
 
       if (!items[index]?.disabled) {
         return index;
@@ -317,47 +397,80 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
     [renderOption, getStyles]
   );
 
+  const wrapperProps = {
+    id,
+    label,
+    description,
+    required,
+    withAsterisk,
+    labelProps,
+    descriptionProps,
+    error,
+    errorProps,
+    labelElement,
+    inputWrapperOrder,
+  };
+
   return (
-    <Box
-      ref={ref}
-      {...getStyles('root', { style: { '--select-stepper-scroll-offset': `${scrollOffset}%` } as React.CSSProperties })}
-      {...others}
-      onKeyDown={handleKeyDown}
-      tabIndex={disabled ? -1 : 0}
-      role="spinbutton"
-      mod={[{ 'data-with-border': withBorder, disabled }, mod]}
-    >
-      <Group>
-        <ActionIcon {...getStyles('leftSection')} disabled={disabled || !canGoPrev} onClick={handleLeftClick} {...leftSectionProps}>
-          {leftIcon}
-        </ActionIcon>
-        <Box {...getStyles('view')}>
-          <Box {...getStyles('scrollArea')} mod={{ animate: animate && isTransitioning }}>
-            {loop && items.length > 0 ? (
-              // Render 3 sets of items for infinite loop effect: [prev][current][next]
-              <>
-                {items.map((item, index) => renderItem(item, 'prev', index))}
-                {items.map((item, index) => renderItem(item, 'current', index, index === currentIndex))}
-                {items.map((item, index) => renderItem(item, 'next', index))}
-              </>
-            ) : (
-              // Normal rendering without loop
-              <>
-                {items.map((item, index) => renderItem(item, 'item', index, index === currentIndex))}
-                {items.length === 0 &&
-                  (typeof emptyValue === 'string' || typeof emptyValue === 'number' ? (
-                    <Text {...getStyles('label')}>{emptyValue}</Text>
-                  ) : (
-                    <Box {...getStyles('label')}>{emptyValue}</Box>
-                  ))}
-              </>
-            )}
-          </Box>
+    <Box ref={ref} {...getStyles('root')}>
+      <Input.Wrapper {...wrapperProps}>
+        <Box
+          {...getStyles('wrapper', {
+            style: { '--select-stepper-scroll-offset': `${scrollOffset}%` } as React.CSSProperties,
+          })}
+          {...others}
+          onKeyDown={handleKeyDown}
+          tabIndex={disabled ? -1 : 0}
+          role="spinbutton"
+          mod={[{ 'data-with-border': withBorder, disabled }, mod]}
+        >
+          <Group>
+            <ActionIcon
+              {...getStyles('leftSection')}
+              disabled={disabled || !canGoPrev}
+              onClick={handleLeftClick}
+              {...leftSectionProps}
+            >
+              {leftIcon}
+            </ActionIcon>
+            <Box {...getStyles('view')}>
+              <Box {...getStyles('scrollArea')} mod={{ animate: animate && isTransitioning }}>
+                {loop && items.length > 0 ? (
+                  // Render 3 sets of items for infinite loop effect: [prev][current][next]
+                  <>
+                    {items.map((item, index) => renderItem(item, 'prev', index))}
+                    {items.map((item, index) =>
+                      renderItem(item, 'current', index, index === currentIndex)
+                    )}
+                    {items.map((item, index) => renderItem(item, 'next', index))}
+                  </>
+                ) : (
+                  // Normal rendering without loop
+                  <>
+                    {items.map((item, index) =>
+                      renderItem(item, 'item', index, index === currentIndex)
+                    )}
+                    {items.length === 0 &&
+                      (typeof emptyValue === 'string' || typeof emptyValue === 'number' ? (
+                        <Text {...getStyles('label')}>{emptyValue}</Text>
+                      ) : (
+                        <Box {...getStyles('label')}>{emptyValue}</Box>
+                      ))}
+                  </>
+                )}
+              </Box>
+            </Box>
+            <ActionIcon
+              {...getStyles('rightSection')}
+              disabled={disabled || !canGoNext}
+              onClick={handleRightClick}
+              {...rightSectionProps}
+            >
+              {rightIcon}
+            </ActionIcon>
+          </Group>
         </Box>
-        <ActionIcon {...getStyles('rightSection')} disabled={disabled || !canGoNext} onClick={handleRightClick} {...rightSectionProps}>
-          {rightIcon}
-        </ActionIcon>
-      </Group>
+      </Input.Wrapper>
     </Box>
   );
 });

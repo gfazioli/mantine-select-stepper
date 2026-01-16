@@ -1,4 +1,8 @@
 .root {
+  position: relative;
+}
+
+.wrapper {
   --select-stepper-view-width: 200px;
   --select-stepper-scroll-offset: 0%;
   --select-stepper-animation-duration: 300ms;
@@ -7,8 +11,10 @@
   border-radius: var(--select-stepper-radius, var(--mantine-radius-default));
   position: relative;
   padding: 3px;
-  display: inline-flex;
   max-width: max-content;
+  margin-top: var(--select-stepper-margin-top, 0rem);
+  margin-bottom: var(--select-stepper-margin-bottom, 0rem);
+  box-sizing: border-box;
 
   @mixin light {
     --select-stepper-border-color: var(--mantine-color-gray-3);
@@ -50,7 +56,8 @@
 }
 
 .scrollArea[data-animate='true'] {
-  transition: transform var(--select-stepper-animation-duration) var(--select-stepper-animation-timing-function);
+  transition: transform var(--select-stepper-animation-duration)
+    var(--select-stepper-animation-timing-function);
 }
 
 .label {

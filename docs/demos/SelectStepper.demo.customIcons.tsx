@@ -19,7 +19,11 @@ function Demo() {
 
 function Demo() {
   return (
-    <SelectStepper data={['React', 'Vue', 'Angular', 'Svelte', 'Solid']} leftIcon={<IconChevronLeft size={16} />} rightIcon={<IconChevronRight size={16} />} />
+    <SelectStepper
+      data={['React', 'Vue', 'Angular', 'Svelte', 'Solid']}
+      leftIcon={<IconChevronLeft size={16} />}
+      rightIcon={<IconChevronRight size={16} />}
+    />
   );
 }
 

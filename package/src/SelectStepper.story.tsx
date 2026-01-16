@@ -16,8 +16,13 @@ export default {
     animationDuration: 300,
     animationTimingFunction: 'ease-in-out',
     emptyValue: 'No selection',
-    withBorder: false,
+    withBorder: true,
     radius: undefined,
+    label: 'Select your favorite framework',
+    description: 'Use the stepper to choose one of the options',
+    error: '',
+    required: false,
+    withAsterisk: false,
   },
   argTypes: {
     data: {
@@ -66,16 +71,36 @@ export default {
     },
     animationTimingFunction: {
       control: 'select',
-      options: ['linear', 'ease', 'ease-in', 'ease-out', 'ease-in-out', 'cubic-bezier(0.68, -0.55, 0.265, 1.55)', 'cubic-bezier(0.175, 0.885, 0.32, 1.275)'],
+      options: [
+        'linear',
+        'ease',
+        'ease-in',
+        'ease-out',
+        'ease-in-out',
+        'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+        'cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+      ],
       description: 'Animation timing function',
     },
-    leftIcon: {
-      control: false,
-      description: 'Left icon element',
+    label: {
+      control: 'text',
+      description: 'Label for the stepper',
     },
-    rightIcon: {
-      control: false,
-      description: 'Right icon element',
+    description: {
+      control: 'text',
+      description: 'Description for the stepper',
+    },
+    error: {
+      control: 'text',
+      description: 'Error message for the stepper',
+    },
+    required: {
+      control: 'boolean',
+      description: 'Marks the stepper as required',
+    },
+    withAsterisk: {
+      control: 'boolean',
+      description: 'Adds an asterisk to the label',
     },
     // onChange: {
     //   action: 'changed',
@@ -86,6 +111,17 @@ export default {
 
 export function Usage() {
   return <SelectStepper data={['React', 'Vue', 'Angular']} />;
+}
+
+export function InputWrapper() {
+  return (
+    <SelectStepper
+      label="Select your favorite framework"
+      description="Use the stepper to choose one of the options"
+      inputWrapperOrder={['description', 'input', 'label', 'error']}
+      data={['React', 'Vue', 'Angular']}
+    />
+  );
 }
 
 export function Uncontrolled() {
@@ -106,7 +142,10 @@ export function Controlled() {
 }
 
 export function ControlledObject() {
-  const [value, setValue] = useState<ComboboxItem | null>({ value: 'vue', label: 'Vue.js Framework' });
+  const [value, setValue] = useState<ComboboxItem | null>({
+    value: 'vue',
+    label: 'Vue.js Framework',
+  });
 
   const data = [
     { value: 'react', label: 'React JS' },
@@ -114,7 +153,13 @@ export function ControlledObject() {
     { value: 'angular', label: 'Angular Platform' },
   ];
 
-  return <SelectStepper data={data} value={value ? value.value : null} onChange={(_value, option) => setValue(option)} />;
+  return (
+    <SelectStepper
+      data={data}
+      value={value ? value.value : null}
+      onChange={(_value, option) => setValue(option)}
+    />
+  );
 }
 
 interface ComplexItem extends ComboboxItem {
@@ -122,7 +167,11 @@ interface ComplexItem extends ComboboxItem {
 }
 
 export function ControlledObjectComplex() {
-  const [value, setValue] = useState<ComplexItem | null>({ value: 'vue', label: 'Vue.js Framework', version: '3.2.37' });
+  const [value, setValue] = useState<ComplexItem | null>({
+    value: 'vue',
+    label: 'Vue.js Framework',
+    version: '3.2.37',
+  });
 
   const data = [
     { value: 'react', label: 'React JS', version: '18.2.0' },
@@ -138,7 +187,11 @@ export function ControlledObjectComplex() {
       <div>Selected value: {value ? value.label : 'None'}</div>
       <div>Selected label: {value ? value.label : 'None'}</div>
       <div>Extra data Version: {value && 'version' in value ? value.version : 'None'}</div>
-      <SelectStepper data={data} value={value ? value.value : null} onChange={(_value, option) => setValue(option)} />
+      <SelectStepper
+        data={data}
+        value={value ? value.value : null}
+        onChange={(_value, option) => setValue(option)}
+      />
     </Stack>
   );
 }
@@ -166,7 +219,11 @@ export function WithProps(props: any) {
 
 export function WithCustomIcons() {
   return (
-    <SelectStepper data={['React', 'Vue', 'Angular', 'Svelte', 'Solid']} leftIcon={<IconChevronLeft size={16} />} rightIcon={<IconChevronRight size={16} />} />
+    <SelectStepper
+      data={['React', 'Vue', 'Angular', 'Svelte', 'Solid']}
+      leftIcon={<IconChevronLeft size={16} />}
+      rightIcon={<IconChevronRight size={16} />}
+    />
   );
 }
 
@@ -200,7 +257,13 @@ export function WithDisabledItems() {
 }
 
 export function WithCustomAnimation() {
-  return <SelectStepper data={['Fast', 'Normal', 'Slow', 'Bouncy']} animationDuration={800} animationTimingFunction="cubic-bezier(0.68, -0.55, 0.265, 1.55)" />;
+  return (
+    <SelectStepper
+      data={['Fast', 'Normal', 'Slow', 'Bouncy']}
+      animationDuration={800}
+      animationTimingFunction="cubic-bezier(0.68, -0.55, 0.265, 1.55)"
+    />
+  );
 }
 
 export function WithoutAnimation() {
@@ -222,7 +285,12 @@ export function RenderOption() {
 }
 
 export function RenderOptionBadge() {
-  return <SelectStepper data={['Instant', 'Switch', 'No Animation']} renderOption={(item) => <Badge>{item.label}</Badge>} />;
+  return (
+    <SelectStepper
+      data={['Instant', 'Switch', 'No Animation']}
+      renderOption={(item) => <Badge>{item.label}</Badge>}
+    />
+  );
 }
 
 export function WithCustomWidth() {
@@ -242,10 +310,10 @@ export function WithOnChange() {
   );
 }
 
-export function InForm() {
+export function InForm(props: any) {
   return (
     <Stack>
-      <SelectStepper data={['React', 'Vue', 'Angular']} withBorder />
+      <SelectStepper data={['React', 'Vue', 'Angular']} {...props} />
       <TextInput placeholder="Your name" />
       <Select data={['React', 'Vue', 'Angular']} placeholder="Select your favorite framework" />
 
@@ -255,9 +323,23 @@ export function InForm() {
       </Group>
 
       <Group>
-        <SelectStepper data={['React', 'Vue', 'Angular']} withBorder />
-        <Select data={['React', 'Vue', 'Angular']} placeholder="Select your favorite framework" />
-        <TextInput placeholder="Your name" />
+        <SelectStepper data={['React', 'Vue', 'Angular']} {...props} />
+        <Select
+          data={['React', 'Vue', 'Angular']}
+          placeholder="Select your favorite framework"
+          label="Select your favorite framework"
+        />
+        <TextInput placeholder="Your name" label="Your name" />
+      </Group>
+      <Group>
+        <SelectStepper data={['React', 'Vue', 'Angular']} {...props} description="Choose wisely" />
+        <Select
+          data={['React', 'Vue', 'Angular']}
+          placeholder="Select your favorite framework"
+          label="Select your favorite framework"
+          description="Choose wisely"
+        />
+        <TextInput placeholder="Your name" label="Your name" description="Enter your full name" />
       </Group>
     </Stack>
   );

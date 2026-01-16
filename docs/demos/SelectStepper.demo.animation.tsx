@@ -29,7 +29,11 @@ function Demo() {
 function Demo() {
   return (
     <Stack>
-      <SelectStepper data={['Fast', 'Normal', 'Slow', 'Bouncy']} animationDuration={800} animationTimingFunction="cubic-bezier(0.68, -0.55, 0.265, 1.55)" />
+      <SelectStepper
+        data={['Fast', 'Normal', 'Slow', 'Bouncy']}
+        animationDuration={800}
+        animationTimingFunction="cubic-bezier(0.68, -0.55, 0.265, 1.55)"
+      />
       <SelectStepper data={['Instant', 'Switch', 'No Animation']} animate={false} />
     </Stack>
   );

@@ -1,4 +1,4 @@
 {
-  "prettier.configPath" : "./.prettierrc.mjs",
-  "prettier.prettierPath" : ""
+  "prettier.configPath": ".prettierrc.mjs",
+  "prettier.prettierPath": ""
 }
