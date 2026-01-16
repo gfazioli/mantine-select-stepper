@@ -1,13 +1,12 @@
 .root {
   --select-stepper-view-width: 200px;
+  --select-stepper-scroll-offset: 0%;
+  --select-stepper-animation-duration: 300ms;
+  --select-stepper-animation-timing-function: ease-in-out;
   position: relative;
 }
 
 .wrapper {
-  --select-stepper-scroll-offset: 0%;
-  --select-stepper-animation-duration: 300ms;
-  --select-stepper-animation-timing-function: ease-in-out;
-
   border-radius: var(--select-stepper-radius, var(--mantine-radius-default));
   position: relative;
   padding: 3px;
