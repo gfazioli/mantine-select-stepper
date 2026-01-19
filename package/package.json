@@ -1,6 +1,6 @@
 {
   "name": "@gfazioli/mantine-select-stepper",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "Mantine SelectStepper is a React component that allows users to navigate through a list of options using increment and decrement buttons, providing an intuitive alternative to traditional dropdown selects for cycling through predefined values.",
   "homepage": "https://gfazioli.github.io/mantine-select-stepper/",
   "packageManager": "yarn@4.0.1",
