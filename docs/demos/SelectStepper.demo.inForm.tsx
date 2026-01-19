@@ -1,4 +1,5 @@
 import { SelectStepper } from '@gfazioli/mantine-select-stepper';
+import { IconMinus, IconPlus } from '@tabler/icons-react';
 import { Flex, Group, Stack, TextInput } from '@mantine/core';
 import { MantineDemo } from '@mantinex/demo';
 
@@ -41,7 +42,13 @@ function Demo() {
 
       <Group grow>
         <Flex>
-          <SelectStepper viewWidth={50} data={['16GB', '32GB', '64GB']} label="Ram" />
+          <SelectStepper
+            viewWidth={100}
+            leftIcon={<IconMinus />}
+            rightIcon={<IconPlus />}
+            data={['16GB', '32GB', '64GB']}
+            label="Ram"
+          />
         </Flex>
         <TextInput label="Incision" placeholder="Your sentence" />
       </Group>

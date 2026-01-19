@@ -1,4 +1,5 @@
 export { animation } from './SelectStepper.demo.animation';
+export { booleanStepper } from './SelectStepper.demo.booleanStepper';
 export { configurator } from './SelectStepper.demo.configurator';
 export { controlled } from './SelectStepper.demo.controlled';
 export { customData } from './SelectStepper.demo.customData';

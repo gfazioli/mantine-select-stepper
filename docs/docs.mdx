@@ -140,6 +140,26 @@ SelectStepper integrates seamlessly with other Mantine form components. It works
 
 <Demo data={demos.inForm} />
 
+## Boolean stepper pattern
+
+The SelectStepper can be effectively used as a boolean toggle by combining several features. This pattern is useful when you want to create an interactive on/off switch with enhanced visual feedback.
+
+Key features demonstrated in this example:
+
+- **Dynamic Icons**: The `leftIcon` and `rightIcon` props change based on the current value, providing visual context
+- **Custom Rendering**: The `renderOption` prop displays the option as a colored badge (green for enabled, red for disabled)
+- **Loop Navigation**: With `loop` enabled, users can continuously toggle between the two states
+- **Controlled State**: The component maintains the boolean value as a string ('true' or 'false')
+
+This pattern is particularly useful for:
+
+- Security settings (enable/disable features)
+- Feature flags and toggles
+- Binary choices with visual distinction
+- Settings that benefit from explicit labeling of both states
+
+<Demo data={demos.booleanStepper} />
+
 ## Use cases
 
 SelectStepper is particularly useful in scenarios where you have a limited set of sequential options and want to provide an intuitive navigation experience:
