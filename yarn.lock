@@ -4086,12 +4086,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^22.19.6":
-  version: 22.19.6
-  resolution: "@types/node@npm:22.19.6"
+"@types/node@npm:^22.19.7":
+  version: 22.19.7
+  resolution: "@types/node@npm:22.19.7"
   dependencies:
     undici-types: "npm:~6.21.0"
-  checksum: 10c0/0d4f305ee560e4261b3aefb186d9a42c0a07d2ab2201cc8cba24b72793a13c3b2a5f0c138fe704e9aaa7a545066d6baf0b98afc1ef7e776503af25cdfd040de0
+  checksum: 10c0/0a4b13fd51306a72393f145693063e074be1bf884bdc642c879436d2c053ac9d573cc0a0d69867f60b14d3f1b9d03317e8ec0e4377f7527cb645e7b2a5d34045
   languageName: node
   linkType: hard
 
@@ -7665,7 +7665,7 @@ __metadata:
     "@next/mdx": "npm:^15.5.9"
     "@tabler/icons-react": "npm:^3.36.1"
     "@types/mdx": "npm:^2.0.13"
-    "@types/node": "npm:^22.19.6"
+    "@types/node": "npm:^22.19.7"
     "@types/react": "npm:^19.2.8"
     "@types/react-dom": "npm:^19.2.3"
     dayjs: "npm:^1.11.19"
@@ -10901,7 +10901,7 @@ __metadata:
     "@types/fs-extra": "npm:^11.0.4"
     "@types/identity-obj-proxy": "npm:^3.0.2"
     "@types/jest": "npm:^29.5.14"
-    "@types/node": "npm:^22.19.6"
+    "@types/node": "npm:^22.19.7"
     "@types/react": "npm:^19.2.8"
     "@types/react-dom": "npm:^19.2.3"
     "@types/signale": "npm:^1.4.7"
@@ -10925,7 +10925,7 @@ __metadata:
     open: "npm:^10.2.0"
     postcss: "npm:^8.5.6"
     postcss-preset-mantine: "npm:1.18.0"
-    prettier: "npm:^3.7.4"
+    prettier: "npm:^3.8.0"
     react: "npm:19.2.3"
     react-dom: "npm:19.2.3"
     rimraf: "npm:^6.1.2"
@@ -13293,12 +13293,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^3.7.4":
-  version: 3.7.4
-  resolution: "prettier@npm:3.7.4"
+"prettier@npm:^3.8.0":
+  version: 3.8.0
+  resolution: "prettier@npm:3.8.0"
   bin:
     prettier: bin/prettier.cjs
-  checksum: 10c0/9675d2cd08eacb1faf1d1a2dbfe24bfab6a912b059fc9defdb380a408893d88213e794a40a2700bd29b140eb3172e0b07c852853f6e22f16f3374659a1a13389
+  checksum: 10c0/8926e9c9941a293b76c2d799089d038e9f6d84fb37702fc370bedd03b3c70d7fcf507e2e3c4f151f222d81820a3b74cac5e692c955cfafe34dd0d02616ce8327
   languageName: node
   linkType: hard
 
