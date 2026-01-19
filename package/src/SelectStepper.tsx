@@ -17,11 +17,22 @@ import {
   type __InputWrapperProps,
   type ActionIconProps,
   type ComboboxItem,
+  type MantineGradient,
   type MantineRadius,
 } from '@mantine/core';
 import { useId, useUncontrolled } from '@mantine/hooks';
 import { getInputOffsets } from './get-input-offsets/get-input-offsets';
 import classes from './SelectStepper.module.css';
+
+export type SelectStepperVariant =
+  | 'filled'
+  | 'light'
+  | 'outline'
+  | 'transparent'
+  | 'white'
+  | 'subtle'
+  | 'default'
+  | 'gradient';
 
 export type SelectStepperStylesNames =
   | 'root'
@@ -117,6 +128,9 @@ export interface SelectStepperBaseProps {
 
   /** `Input.Label` root element, `'label'` by default */
   labelElement?: 'label' | 'div';
+
+  /** Gradient values used with `variant="gradient"`. @default `theme.defaultGradient`. */
+  gradient?: MantineGradient;
 }
 
 export interface SelectStepperProps
@@ -131,6 +145,7 @@ export type SelectStepperFactory = PolymorphicFactory<{
   defaultComponent: 'div';
   defaultRef: HTMLDivElement;
   stylesNames: SelectStepperStylesNames;
+  variant: SelectStepperVariant;
   vars: SelectStepperCssVariables;
 }>;
 
@@ -225,6 +240,7 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
     labelElement,
     error,
     inputWrapperOrder,
+    variant,
 
     classNames,
     style,
@@ -435,8 +451,10 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
           role="spinbutton"
           mod={[{ 'data-with-border': withBorder, disabled }, mod]}
         >
-          <Group>
+          <Group gap={1}>
             <ActionIcon
+              variant={variant}
+              radius={radius ?? undefined}
               {...getStyles('leftSection')}
               disabled={disabled || !canGoPrev}
               onClick={handleLeftClick}
@@ -472,6 +490,8 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
               </Box>
             </Box>
             <ActionIcon
+              variant={variant}
+              radius={radius ?? undefined}
               {...getStyles('rightSection')}
               disabled={disabled || !canGoNext}
               onClick={handleRightClick}

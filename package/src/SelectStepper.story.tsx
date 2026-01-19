@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IconMinus, IconPlus } from '@tabler/icons-react';
+import { IconCheck, IconMinus, IconPlus } from '@tabler/icons-react';
 import { Badge, Code, Group, Select, Stack, TextInput, type ComboboxItem } from '@mantine/core';
 import { SelectStepper } from './SelectStepper';
 import classes from './Story.module.css';
@@ -8,8 +8,6 @@ export default {
   title: 'Components/SelectStepper',
   component: SelectStepper,
   args: {
-    data: ['React', 'Vue', 'Angular', 'Svelte', 'Solid'],
-    defaultValue: 'React',
     loop: false,
     disabled: false,
     viewWidth: 200,
@@ -102,6 +100,20 @@ export default {
     withAsterisk: {
       control: 'boolean',
       description: 'Adds an asterisk to the label',
+    },
+    variant: {
+      control: 'select',
+      options: [
+        'filled',
+        'outline',
+        'default',
+        'light',
+        'subtle',
+        'gradient',
+        'transparent',
+        'white',
+      ],
+      description: 'Variant of the stepper',
     },
     // onChange: {
     //   action: 'changed',
@@ -316,9 +328,10 @@ export function RenderOption() {
   );
 }
 
-export function RenderOptionBadge() {
+export function RenderOptionBadge(props: any) {
   return (
     <SelectStepper
+      {...props}
       data={['Instant', 'Switch', 'No Animation']}
       renderOption={(item) => <Badge>{item.label}</Badge>}
     />
@@ -378,6 +391,43 @@ export function InForm(props: any) {
         />
         <TextInput placeholder="Your name" label="Your name" description="Enter your full name" />
       </Group>
+    </Stack>
+  );
+}
+
+export function BooleanStepper() {
+  const [value, setValue] = useState<string | null>('false');
+
+  const handleChange = (val: string | null) => {
+    setValue(val);
+  };
+
+  return (
+    <Stack>
+      <SelectStepper
+        viewWidth={200}
+        animate={false}
+        value={value}
+        loop
+        label={`Boolean Stepper: ${value}`}
+        variant="subtle"
+        leftIcon={value === 'true' ? <IconCheck size={16} /> : null}
+        rightIcon={value === 'false' ? <IconPlus size={16} /> : <IconMinus color="red" size={16} />}
+        onChange={handleChange}
+        data={[
+          {
+            value: 'false',
+            label: 'Malware Protection',
+          },
+          {
+            value: 'true',
+            label: 'Malware Protection',
+          },
+        ]}
+        renderOption={(item) => (
+          <Badge color={item.value === 'true' ? 'green' : 'red'}>{item.label}</Badge>
+        )}
+      />
     </Stack>
   );
 }
