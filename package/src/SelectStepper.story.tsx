@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+import { IconMinus, IconPlus } from '@tabler/icons-react';
 import { Badge, Code, Group, Select, Stack, TextInput, type ComboboxItem } from '@mantine/core';
 import { SelectStepper } from './SelectStepper';
 import classes from './Story.module.css';
@@ -252,8 +252,8 @@ export function WithCustomIcons() {
   return (
     <SelectStepper
       data={['React', 'Vue', 'Angular', 'Svelte', 'Solid']}
-      leftIcon={<IconChevronLeft size={16} />}
-      rightIcon={<IconChevronRight size={16} />}
+      leftIcon={<IconMinus size={16} />}
+      rightIcon={<IconPlus size={16} />}
     />
   );
 }
@@ -304,6 +304,7 @@ export function WithoutAnimation() {
 export function RenderOption() {
   return (
     <SelectStepper
+      viewWidth={200}
       data={['Instant', 'Switch', 'No Animation']}
       renderOption={(item) => (
         <Group>

@@ -1,17 +1,17 @@
 import { SelectStepper } from '@gfazioli/mantine-select-stepper';
-import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+import { IconMinus, IconPlus } from '@tabler/icons-react';
 import { MantineDemo } from '@mantinex/demo';
 
 const code = `
-import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import { SelectStepper } from '@gfazioli/mantine-select-stepper';
+import { IconMinus, IconPlus } from '@tabler/icons-react';
 
 function Demo() {
   return (
-    <SelectStepper 
-      data={['React', 'Vue', 'Angular', 'Svelte', 'Solid']} 
-      leftIcon={<IconChevronLeft size={16} />} 
-      rightIcon={<IconChevronRight size={16} />} 
+    <SelectStepper
+      data={['16GB', '32GB', '64GB', '128GB', '256GB']}
+      leftIcon={<IconMinus size={16} />}
+      rightIcon={<IconPlus size={16} />}
     />
   );
 }
@@ -20,9 +20,9 @@ function Demo() {
 function Demo() {
   return (
     <SelectStepper
-      data={['React', 'Vue', 'Angular', 'Svelte', 'Solid']}
-      leftIcon={<IconChevronLeft size={16} />}
-      rightIcon={<IconChevronRight size={16} />}
+      data={['16GB', '32GB', '64GB', '128GB', '256GB']}
+      leftIcon={<IconMinus size={16} />}
+      rightIcon={<IconPlus size={16} />}
     />
   );
 }

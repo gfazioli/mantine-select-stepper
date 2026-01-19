@@ -43,7 +43,7 @@ function Demo() {
         <Flex>
           <SelectStepper viewWidth={50} data={['16GB', '32GB', '64GB']} label="Ram" />
         </Flex>
-        <TextInput placeholder="Years" />
+        <TextInput label="Incision" placeholder="Your sentence" />
       </Group>
     </Stack>
   );

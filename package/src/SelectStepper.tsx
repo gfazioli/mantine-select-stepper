@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef } from 'react';
-import { IconMinus, IconPlus } from '@tabler/icons-react';
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import {
   ActionIcon,
   Box,
@@ -137,8 +137,8 @@ export type SelectStepperFactory = PolymorphicFactory<{
 const defaultProps: Partial<SelectStepperProps> = {
   data: [],
   defaultValue: null,
-  leftIcon: <IconMinus />,
-  rightIcon: <IconPlus />,
+  leftIcon: <IconChevronLeft />,
+  rightIcon: <IconChevronRight />,
   onLeftIconClick: undefined,
   onRightIconClick: undefined,
   viewWidth: 160,
