@@ -1,6 +1,6 @@
 # Mantine SelectStepper Component
 
-<img  alt="Mantine SelectStepper" src="https://github.com/gfazioli/mantine-select-stepper/blob/master/logo.png" />
+<img alt="Mantine SelectStepper" src="https://github.com/gfazioli/mantine-select-stepper/blob/master/logo.png" />
 
 <div align="center">
 
@@ -78,3 +78,6 @@ Your help truly matters.
   
 [![Star History Chart](https://api.star-history.com/svg?repos=gfazioli/mantine-select-stepper&type=Timeline)](https://www.star-history.com/#gfazioli/mantine-select-stepper&Timeline)
 
+---
+
+https://github.com/gfazioli/mantine-select-stepper/blob/master/video.mp4
