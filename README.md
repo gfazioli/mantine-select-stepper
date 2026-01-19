@@ -80,4 +80,4 @@ Your help truly matters.
 
 ---
 
-https://github.com/gfazioli/mantine-select-stepper/blob/master/video.mp4
+https://github.com/user-attachments/assets/d430dd46-2da5-46e3-8dcd-73f666f8c6fe
