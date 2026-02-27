@@ -1,6 +1,6 @@
 # Mantine SelectStepper Component
 
-<img alt="Mantine SelectStepper" src="https://github.com/gfazioli/mantine-select-stepper/blob/master/logo.png" />
+<img alt="Mantine SelectStepper" src="https://github.com/gfazioli/mantine-select-stepper/blob/master/logo.jpeg" />
 
 <div align="center">
 
