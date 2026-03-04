@@ -451,7 +451,7 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
           role="spinbutton"
           mod={[{ 'data-with-border': withBorder, disabled }, mod]}
         >
-          <Group gap={1}>
+          <Group gap={1} wrap="nowrap">
             <ActionIcon
               variant={variant}
               radius={radius ?? undefined}
