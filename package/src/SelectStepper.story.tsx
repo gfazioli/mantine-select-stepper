@@ -347,6 +347,21 @@ export function WithCustomWidth() {
   );
 }
 
+export function NoWrapInNarrowContainer() {
+  return (
+    <div style={{ maxWidth: 220 }}>
+      <SelectStepper
+        label="No-wrap layout"
+        description="The action icons stay on the same line when space is limited."
+        data={[
+          'An intentionally long option label',
+          'Another intentionally long option label',
+        ]}
+      />
+    </div>
+  );
+}
+
 export function WithOnChange() {
   return (
     <SelectStepper
