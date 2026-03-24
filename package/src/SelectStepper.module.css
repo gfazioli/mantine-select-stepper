@@ -1,5 +1,6 @@
 .root {
   --select-stepper-view-width: 200px;
+  --select-stepper-view-height: 36px;
   --select-stepper-scroll-offset: 0%;
   --select-stepper-animation-duration: 300ms;
   --select-stepper-animation-timing-function: ease-in-out;
@@ -55,7 +56,7 @@
 
   &[data-orientation='vertical'] {
     width: auto;
-    height: var(--select-stepper-view-width);
+    height: var(--select-stepper-view-height);
   }
 }
 
@@ -66,7 +67,7 @@
   &[data-orientation='vertical'] {
     flex-direction: column;
     transform: translateY(var(--select-stepper-scroll-offset));
-    height: var(--select-stepper-view-width);
+    height: var(--select-stepper-view-height);
   }
 }
 
@@ -88,6 +89,12 @@
 .scrollArea[data-orientation='vertical'] .content {
   min-width: auto;
   width: auto;
-  min-height: var(--select-stepper-view-width);
-  height: var(--select-stepper-view-width);
+  min-height: var(--select-stepper-view-height);
+  height: var(--select-stepper-view-height);
+}
+
+/* Vertical mode: buttons stretch full width */
+.wrapper[data-orientation='vertical'] .leftSection,
+.wrapper[data-orientation='vertical'] .rightSection {
+  width: 100%;
 }

@@ -18,6 +18,8 @@ export const SelectStepperStylesApi: StylesApiData<SelectStepperFactory> = {
   vars: {
     root: {
       '--select-stepper-view-width': 'Controls the width of the view area',
+      '--select-stepper-view-height':
+        'Controls the height of the view area in vertical orientation',
       '--select-stepper-animation-duration': 'Controls the duration of scroll animations',
       '--select-stepper-animation-timing-function':
         'Controls the timing function for scroll animations',
