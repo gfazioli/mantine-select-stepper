@@ -1,7 +1,17 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { IconCheck, IconMinus, IconPlus } from '@tabler/icons-react';
-import { Badge, Code, Group, Select, Stack, TextInput, type ComboboxItem } from '@mantine/core';
-import { SelectStepper } from './SelectStepper';
+import {
+  Badge,
+  Button,
+  Code,
+  Group,
+  Select,
+  Stack,
+  Text,
+  TextInput,
+  type ComboboxItem,
+} from '@mantine/core';
+import { SelectStepper, type SelectStepperRef } from './SelectStepper';
 import classes from './Story.module.css';
 
 export default {
@@ -115,10 +125,16 @@ export default {
       ],
       description: 'Variant of the stepper',
     },
-    // onChange: {
-    //   action: 'changed',
-    //   description: 'Callback when value changes',
-    // },
+    orientation: {
+      control: 'select',
+      options: ['horizontal', 'vertical'],
+      description: 'Orientation of the stepper',
+    },
+    size: {
+      control: 'select',
+      options: ['xs', 'sm', 'md', 'lg', 'xl'],
+      description: 'Size of the stepper',
+    },
   },
 };
 
@@ -427,6 +443,127 @@ export function BooleanStepper() {
         renderOption={(item) => (
           <Badge color={item.value === 'true' ? 'green' : 'red'}>{item.label}</Badge>
         )}
+      />
+    </Stack>
+  );
+}
+
+// ─── New v2 stories ──────────────────────────────────────────────────
+
+export function Vertical() {
+  return (
+    <Group align="flex-start">
+      <SelectStepper
+        data={['XS', 'S', 'M', 'L', 'XL']}
+        orientation="vertical"
+        viewWidth={36}
+        label="Size"
+        loop
+      />
+      <SelectStepper
+        data={['50%', '75%', '100%', '125%', '150%']}
+        orientation="vertical"
+        viewWidth={36}
+        label="Zoom"
+      />
+    </Group>
+  );
+}
+
+export function Sizes() {
+  return (
+    <Stack>
+      <SelectStepper data={['React', 'Vue', 'Angular']} size="xs" label="Extra small" />
+      <SelectStepper data={['React', 'Vue', 'Angular']} size="sm" label="Small" />
+      <SelectStepper data={['React', 'Vue', 'Angular']} size="md" label="Medium" />
+      <SelectStepper data={['React', 'Vue', 'Angular']} size="lg" label="Large" />
+      <SelectStepper data={['React', 'Vue', 'Angular']} size="xl" label="Extra large" />
+    </Stack>
+  );
+}
+
+export function GradientVariant() {
+  return (
+    <SelectStepper
+      data={['Low', 'Medium', 'High', 'Ultra']}
+      variant="gradient"
+      gradient={{ from: 'indigo', to: 'cyan', deg: 45 }}
+      label="Quality"
+    />
+  );
+}
+
+export function ImperativeAPI() {
+  const controlRef = useRef<SelectStepperRef>(null);
+
+  return (
+    <Stack>
+      <SelectStepper
+        controlRef={controlRef}
+        data={['React', 'Vue', 'Angular', 'Svelte', 'Ember']}
+        label="Framework"
+      />
+      <Group>
+        <Button size="xs" variant="light" onClick={() => controlRef.current?.prev()}>
+          Prev
+        </Button>
+        <Button size="xs" variant="light" onClick={() => controlRef.current?.next()}>
+          Next
+        </Button>
+        <Button size="xs" variant="light" onClick={() => controlRef.current?.navigateTo('Svelte')}>
+          Go to Svelte
+        </Button>
+        <Button size="xs" variant="subtle" onClick={() => controlRef.current?.reset()}>
+          Reset
+        </Button>
+      </Group>
+    </Stack>
+  );
+}
+
+export function OnStepCallbacks() {
+  const [log, setLog] = useState<string[]>([]);
+
+  return (
+    <Stack>
+      <SelectStepper
+        data={['React', 'Vue', 'Angular']}
+        loop
+        onStepStart={() => setLog((prev) => [...prev, `stepStart @ ${Date.now()}`])}
+        onStepEnd={() => setLog((prev) => [...prev, `stepEnd @ ${Date.now()}`])}
+        label="Navigate and watch logs"
+      />
+      <Stack gap={2}>
+        {log.map((entry, i) => (
+          <Text key={i} size="xs" c="dimmed">
+            {entry}
+          </Text>
+        ))}
+        {log.length === 0 && (
+          <Text size="xs" c="dimmed">
+            Navigate to see callback logs...
+          </Text>
+        )}
+      </Stack>
+    </Stack>
+  );
+}
+
+export function Swipeable() {
+  return (
+    <Stack>
+      <SelectStepper
+        data={['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']}
+        swipeable
+        loop
+        label="Swipe enabled (default)"
+        description="Swipe left/right to navigate"
+      />
+      <SelectStepper
+        data={['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']}
+        swipeable={false}
+        label="Swipe disabled"
+        description="Only buttons and keyboard"
       />
     </Stack>
   );

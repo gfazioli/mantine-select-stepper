@@ -54,8 +54,8 @@
   position: relative;
 
   &[data-orientation='vertical'] {
-    width: var(--select-stepper-view-width);
-    height: auto;
+    width: auto;
+    height: var(--select-stepper-view-width);
   }
 }
 
@@ -66,6 +66,7 @@
   &[data-orientation='vertical'] {
     flex-direction: column;
     transform: translateY(var(--select-stepper-scroll-offset));
+    height: var(--select-stepper-view-width);
   }
 }
 
@@ -82,4 +83,11 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+}
+
+.scrollArea[data-orientation='vertical'] .content {
+  min-width: auto;
+  width: auto;
+  min-height: var(--select-stepper-view-width);
+  height: var(--select-stepper-view-width);
 }

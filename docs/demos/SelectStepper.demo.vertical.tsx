@@ -12,12 +12,14 @@ function Demo() {
       <SelectStepper
         data={['XS', 'S', 'M', 'L', 'XL']}
         orientation="vertical"
+        viewWidth={36}
         label="Size"
         loop
       />
       <SelectStepper
         data={['50%', '75%', '100%', '125%', '150%']}
         orientation="vertical"
+        viewWidth={36}
         label="Zoom"
       />
     </Group>
@@ -28,10 +30,17 @@ function Demo() {
 function Demo() {
   return (
     <Group>
-      <SelectStepper data={['XS', 'S', 'M', 'L', 'XL']} orientation="vertical" label="Size" loop />
+      <SelectStepper
+        data={['XS', 'S', 'M', 'L', 'XL']}
+        orientation="vertical"
+        viewWidth={36}
+        label="Size"
+        loop
+      />
       <SelectStepper
         data={['50%', '75%', '100%', '125%', '150%']}
         orientation="vertical"
+        viewWidth={36}
         label="Zoom"
       />
     </Group>
