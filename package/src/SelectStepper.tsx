@@ -376,8 +376,9 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
   useEffect(() => {
     if (currentIndex !== -1) {
       if (isInternalNavRef.current) {
-        // Internal navigation: don't cancel the transition, just reset the flag
+        // Internal navigation: handleNavigation manages continuousIndex directly
         isInternalNavRef.current = false;
+        return;
       } else if (isTransitioning) {
         // External value change during transition: cancel ongoing transition
         setIsTransitioning(false);
