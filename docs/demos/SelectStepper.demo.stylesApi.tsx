@@ -3,7 +3,7 @@ import { MantineDemo } from '@mantinex/demo';
 import { SelectStepperStylesApi } from '../styles-api/SelectStepper.styles-api';
 
 const code = `
-import { SelectStepper } from "@gfazioli/mantine-json-tree";
+import { SelectStepper } from "@gfazioli/mantine-select-stepper";
 import { data } from './data';
 
 function Demo() {

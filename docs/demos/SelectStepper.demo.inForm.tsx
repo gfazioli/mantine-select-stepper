@@ -4,31 +4,26 @@ import { Flex, Group, Stack, TextInput } from '@mantine/core';
 import { MantineDemo } from '@mantinex/demo';
 
 const code = `
-import { Group, Select, Stack, TextInput } from '@mantine/core';
+import { IconMinus, IconPlus } from '@tabler/icons-react';
+import { Flex, Group, Stack, TextInput } from '@mantine/core';
 import { SelectStepper } from '@gfazioli/mantine-select-stepper';
 
 function Demo() {
   return (
     <Stack>
-      <SelectStepper 
-        data={['React', 'Vue', 'Angular']} 
-        withBorder 
-        placeholder="Select framework"
-      />
-      <TextInput placeholder="Your name" label="Name" />
-      <Select 
-        data={['React', 'Vue', 'Angular']} 
-        placeholder="Select your favorite framework"
-        label="Favorite framework"
-      />
+      <TextInput placeholder="Server application" label="Name" />
 
       <Group grow>
-        <SelectStepper 
-          data={['Junior', 'Mid', 'Senior']} 
-          withBorder 
-          placeholder="Experience level"
-        />
-        <TextInput placeholder="Years" label="Years of experience" />
+        <Flex>
+          <SelectStepper
+            viewWidth={100}
+            leftIcon={<IconMinus />}
+            rightIcon={<IconPlus />}
+            data={['16GB', '32GB', '64GB']}
+            label="Ram"
+          />
+        </Flex>
+        <TextInput label="Location" placeholder="Region" />
       </Group>
     </Stack>
   );
@@ -50,7 +45,7 @@ function Demo() {
             label="Ram"
           />
         </Flex>
-        <TextInput label="Incision" placeholder="Your sentence" />
+        <TextInput label="Location" placeholder="Region" />
       </Group>
     </Stack>
   );

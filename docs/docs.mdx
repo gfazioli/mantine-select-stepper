@@ -105,14 +105,61 @@ Add a border to the component using the `withBorder` prop.
 
 Control the animation behavior with the `animate`, `animationDuration`, and `animationTimingFunction` props. You can create custom timing functions for unique effects, or disable animations entirely.
 
+Use the `onTransitionStart` and `onTransitionEnd` callbacks to synchronize external logic with transitions.
+
 <Demo data={demos.animation} />
 
 ## Keyboard navigation
 
 SelectStepper supports keyboard navigation:
 
+**Horizontal mode (default):**
+
 - `ArrowLeft` or `ArrowDown` - Move to previous item
 - `ArrowRight` or `ArrowUp` - Move to next item
+
+**Vertical mode:**
+
+- `ArrowUp` - Move to previous item
+- `ArrowDown` - Move to next item
+
+> Navigation automatically skips disabled items.
+
+## Swipe gestures
+
+SelectStepper supports touch/swipe navigation out of the box. Swipe left/right (or up/down in vertical mode) to navigate between items. Control this behavior with the `swipeable` and `swipeThreshold` props.
+
+<Demo data={demos.swipeable} />
+
+## Vertical orientation
+
+Set `orientation="vertical"` to render the stepper in vertical mode. Navigation buttons switch to up/down arrows, and swipe gestures respond to vertical movement.
+
+<Demo data={demos.vertical} />
+
+## Sizes
+
+Use the `size` prop to control the ActionIcon and overall component size.
+
+<Demo data={demos.sizes} />
+
+## Gradient variant
+
+Use `variant="gradient"` with the `gradient` prop to apply gradient styling to the navigation buttons.
+
+<Demo data={demos.gradient} />
+
+## Empty value
+
+Use the `emptyValue` prop to display custom content when no options are available.
+
+<Demo data={demos.emptyValue} />
+
+## Imperative API
+
+Use the `controlRef` prop to access imperative methods: `next()`, `prev()`, `reset()`, and `navigateTo(value)`. The standard `ref` prop still provides access to the underlying DOM element.
+
+<Demo data={demos.imperative} />
 
 ## Custom rendering
 

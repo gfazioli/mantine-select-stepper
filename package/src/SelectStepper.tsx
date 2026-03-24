@@ -1,5 +1,10 @@
-import React, { useEffect, useMemo, useRef } from 'react';
-import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+import React, { useEffect, useImperativeHandle, useMemo, useRef } from 'react';
+import {
+  IconChevronDown,
+  IconChevronLeft,
+  IconChevronRight,
+  IconChevronUp,
+} from '@tabler/icons-react';
 import {
   ActionIcon,
   Box,
@@ -8,8 +13,10 @@ import {
   getRadius,
   Group,
   Input,
+  MantineSize,
   PolymorphicFactory,
   polymorphicFactory,
+  Stack,
   StylesApiProps,
   Text,
   useProps,
@@ -57,10 +64,24 @@ export type SelectStepperCssVariables = {
 
 export type SelectStepperItem = string | ComboboxItem;
 
+export type SelectStepperOrientation = 'horizontal' | 'vertical';
+
 function normalizeData(
   data: SelectStepperItem[]
 ): { value: string; label: string; disabled?: boolean }[] {
   return data.map((item) => (typeof item === 'string' ? { value: item, label: item } : item));
+}
+
+/** Methods available via the imperative controlRef handle */
+export interface SelectStepperRef {
+  /** Navigate to the next item */
+  next: () => void;
+  /** Navigate to the previous item */
+  prev: () => void;
+  /** Reset to the initial/default value */
+  reset: () => void;
+  /** Navigate to a specific value */
+  navigateTo: (value: string) => void;
 }
 
 export interface SelectStepperBaseProps {
@@ -131,6 +152,33 @@ export interface SelectStepperBaseProps {
 
   /** Gradient values used with `variant="gradient"`. @default `theme.defaultGradient`. */
   gradient?: MantineGradient;
+
+  /** Enable swipe/touch gesture navigation @default true */
+  swipeable?: boolean;
+
+  /** Minimum swipe distance in pixels to trigger navigation @default 30 */
+  swipeThreshold?: number;
+
+  /** Callback fired when navigation animation starts */
+  onStepStart?: () => void;
+
+  /** Callback fired when navigation animation ends */
+  onStepEnd?: () => void;
+
+  /** Component size, controls ActionIcon size and font size @default 'sm' */
+  size?: MantineSize;
+
+  /** Orientation of the stepper @default 'horizontal' */
+  orientation?: SelectStepperOrientation;
+
+  /** Accessible label for the previous button @default 'Previous item' */
+  previousLabel?: string;
+
+  /** Accessible label for the next button @default 'Next item' */
+  nextLabel?: string;
+
+  /** Ref for imperative control methods (next, prev, reset, navigateTo) */
+  controlRef?: React.RefObject<SelectStepperRef | null>;
 }
 
 export interface SelectStepperProps
@@ -151,9 +199,8 @@ export type SelectStepperFactory = PolymorphicFactory<{
 
 const defaultProps: Partial<SelectStepperProps> = {
   data: [],
-  defaultValue: null,
-  leftIcon: <IconChevronLeft />,
-  rightIcon: <IconChevronRight />,
+  leftIcon: undefined,
+  rightIcon: undefined,
   onLeftIconClick: undefined,
   onRightIconClick: undefined,
   viewWidth: 160,
@@ -165,6 +212,12 @@ const defaultProps: Partial<SelectStepperProps> = {
   withAsterisk: false,
   labelElement: 'label',
   inputWrapperOrder: ['label', 'description', 'input', 'error'],
+  swipeable: true,
+  swipeThreshold: 30,
+  size: 'sm',
+  orientation: 'horizontal',
+  previousLabel: 'Previous item',
+  nextLabel: 'Next item',
 };
 
 const varsResolver = createVarsResolver<SelectStepperFactory>(
@@ -241,6 +294,16 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
     error,
     inputWrapperOrder,
     variant,
+    gradient,
+    swipeable,
+    swipeThreshold,
+    onStepStart,
+    onStepEnd,
+    size,
+    orientation,
+    previousLabel,
+    nextLabel,
+    controlRef,
 
     classNames,
     style,
@@ -265,29 +328,31 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
     varsResolver,
   });
 
-  const items = normalizeData(data);
+  // [PERF] Memoize normalized data
+  const items = useMemo(() => normalizeData(data), [data]);
 
-  // If neither value nor defaultValue are set, use the first non-disabled item
+  const isVertical = orientation === 'vertical';
+
+  // [FIX 1.4] defaultValue={null} should mean "no selection", check !== undefined
   const firstNonDisabledItem = items.find((item) => !item.disabled);
   const initialValue =
-    defaultValue !== null && defaultValue !== undefined
-      ? defaultValue
-      : firstNonDisabledItem?.value || null;
+    defaultValue !== undefined ? defaultValue : firstNonDisabledItem?.value || null;
 
+  // Store initial value for reset
+  const initialValueRef = useRef(initialValue);
+
+  // [FIX 1.1] Pass onChange to useUncontrolled
   const [_value, setValue] = useUncontrolled({
     value,
     defaultValue: initialValue,
-    onChange: undefined,
+    onChange: (newValue) => {
+      const option = items.find((item) => item.value === newValue) || {
+        value: newValue || '',
+        label: newValue || '',
+      };
+      onChange?.(newValue, option);
+    },
   });
-
-  const handleChange = (newValue: string | null) => {
-    setValue(newValue);
-    const option = items.find((item) => item.value === newValue) || {
-      value: newValue || '',
-      label: newValue || '',
-    };
-    onChange?.(newValue, option);
-  };
 
   const currentIndex = items.findIndex((item) => item.value === _value);
 
@@ -297,21 +362,61 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
   );
   const [isTransitioning, setIsTransitioning] = React.useState(false);
 
-  // Sync continuousIndex when value changes externally (controlled mode)
+  const mountedRef = useRef(true);
+  const isInternalNavRef = useRef(false);
+
   useEffect(() => {
-    if (currentIndex !== -1 && !isTransitioning) {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
+
+  // [FIX 1.3] Sync continuousIndex when value changes externally — always accept external updates
+  useEffect(() => {
+    if (currentIndex !== -1) {
+      if (isInternalNavRef.current) {
+        // Internal navigation: don't cancel the transition, just reset the flag
+        isInternalNavRef.current = false;
+      } else if (isTransitioning) {
+        // External value change during transition: cancel ongoing transition
+        setIsTransitioning(false);
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+          timeoutRef.current = undefined;
+        }
+      }
       setContinuousIndex(currentIndex + (loop ? items.length : 0));
     }
-  }, [_value, items.length, loop, isTransitioning, currentIndex]);
+  }, [_value, items.length, loop]);
+
+  // [FIX 1.6] Reset value when data changes and current value is no longer present
+  useEffect(() => {
+    if (items.length > 0 && _value !== null && _value !== undefined) {
+      const exists = items.some((item) => item.value === _value);
+      if (!exists) {
+        const firstValid = items.find((item) => !item.disabled);
+        setValue(firstValid?.value || items[0].value);
+      }
+    }
+  }, [items]);
 
   // Calculate scroll offset based on continuous index
-  const scrollOffset = loop ? -continuousIndex * 100 : -currentIndex * 100;
+  const scrollOffset = loop
+    ? -continuousIndex * 100
+    : currentIndex === -1
+      ? 0
+      : -currentIndex * 100;
 
   const canGoPrev = loop ? items.length > 1 : currentIndex > 0;
   const canGoNext = loop ? items.length > 1 : currentIndex < items.length - 1;
 
   const findNextValidIndex = (startIndex: number, direction: 1 | -1): number => {
     const len = items.length;
+    if (len === 0) {
+      return -1;
+    }
+
     let index = startIndex;
 
     for (let i = 0; i < len; i++) {
@@ -330,7 +435,7 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
     return currentIndex;
   };
 
-  const timeoutRef = useRef<number | undefined>(undefined);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   // Cleanup timeout on unmount
   useEffect(() => {
@@ -347,19 +452,31 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
       return;
     }
 
+    // [FIX 1.2] Always clear previous timeout before starting a new one
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = undefined;
+    }
+
     setIsTransitioning(true);
+    onStepStart?.();
     const nextIndex = findNextValidIndex(currentIndex, direction);
 
-    if (nextIndex !== currentIndex) {
+    if (nextIndex !== currentIndex && nextIndex !== -1) {
       if (loop) {
         setContinuousIndex((prev) => prev + direction);
       }
-      handleChange(items[nextIndex].value);
+      isInternalNavRef.current = true;
+      setValue(items[nextIndex].value);
 
       // Reset transition flag after animation
       const duration = typeof animationDuration === 'number' ? animationDuration : 300;
-      timeoutRef.current = window.setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
+        if (!mountedRef.current) {
+          return;
+        }
         setIsTransitioning(false);
+        onStepEnd?.();
         // Reset to center group if needed
         if (loop) {
           setContinuousIndex(items.length + nextIndex);
@@ -370,46 +487,98 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
     }
   };
 
-  const handleLeftClick = () => handleNavigation(-1);
-  const handleRightClick = () => handleNavigation(1);
+  const handleLeftClick = () => {
+    onLeftIconClick?.();
+    handleNavigation(-1);
+  };
+
+  const handleRightClick = () => {
+    onRightIconClick?.();
+    handleNavigation(1);
+  };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (disabled) {
       return;
     }
 
-    switch (event.key) {
-      case 'ArrowLeft':
-      case 'ArrowDown':
-        event.preventDefault();
-        handleLeftClick();
-        break;
-      case 'ArrowRight':
-      case 'ArrowUp':
-        event.preventDefault();
-        handleRightClick();
-        break;
-      default:
+    const prevKeys = isVertical ? ['ArrowUp'] : ['ArrowLeft', 'ArrowDown'];
+    const nextKeys = isVertical ? ['ArrowDown'] : ['ArrowRight', 'ArrowUp'];
+
+    if (prevKeys.includes(event.key)) {
+      event.preventDefault();
+      handleLeftClick();
+    } else if (nextKeys.includes(event.key)) {
+      event.preventDefault();
+      handleRightClick();
     }
   };
+
+  // --- Swipe/Touch gesture support via Pointer Events ---
+  const pointerStartRef = useRef<{ x: number; y: number } | null>(null);
+
+  const handlePointerDown = (event: React.PointerEvent) => {
+    if (!swipeable || disabled) {
+      return;
+    }
+    pointerStartRef.current = { x: event.clientX, y: event.clientY };
+  };
+
+  const handlePointerUp = (event: React.PointerEvent) => {
+    if (!swipeable || disabled || !pointerStartRef.current) {
+      return;
+    }
+    const dx = event.clientX - pointerStartRef.current.x;
+    const dy = event.clientY - pointerStartRef.current.y;
+    const threshold = swipeThreshold || 30;
+
+    if (isVertical) {
+      if (Math.abs(dy) > threshold && Math.abs(dy) > Math.abs(dx)) {
+        handleNavigation(dy < 0 ? 1 : -1);
+      }
+    } else if (Math.abs(dx) > threshold && Math.abs(dx) > Math.abs(dy)) {
+      handleNavigation(dx < 0 ? 1 : -1);
+    }
+
+    pointerStartRef.current = null;
+  };
+
+  const handlePointerCancel = () => {
+    pointerStartRef.current = null;
+  };
+
+  // --- Imperative handle ---
+  useImperativeHandle(controlRef, () => ({
+    next: () => handleNavigation(1),
+    prev: () => handleNavigation(-1),
+    reset: () => {
+      setValue(initialValueRef.current);
+    },
+    navigateTo: (targetValue: string) => {
+      const targetIndex = items.findIndex((item) => item.value === targetValue);
+      if (targetIndex !== -1 && !items[targetIndex].disabled) {
+        setValue(targetValue);
+      }
+    },
+  }));
 
   // Memoized function to render a single item
   const renderItem = useMemo(
     () => (item: ComboboxItem, keyPrefix: string, index: number, isActive?: boolean) => {
       const key = `${keyPrefix}-${item.value}-${index}`;
-      const labelProps = getStyles('content');
+      const contentStyleProps = getStyles('content');
       const activeProps = isActive ? { 'data-active': true } : {};
 
       if (typeof renderOption === 'function') {
         return (
-          <Box key={key} {...labelProps} {...activeProps}>
+          <Box key={key} {...contentStyleProps} {...activeProps}>
             {renderOption(item)}
           </Box>
         );
       }
 
       return (
-        <Text key={key} {...labelProps} {...activeProps}>
+        <Text key={key} {...contentStyleProps} {...activeProps}>
           {item.label}
         </Text>
       );
@@ -437,33 +606,72 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
     style: style as unknown,
   };
 
+  // Determine current label for aria-valuetext
+  const currentLabel = currentIndex !== -1 ? items[currentIndex]?.label : undefined;
+
+  // [FIX 1.5] Determine display index — show first item when all disabled or no match
+  const displayIndex = currentIndex !== -1 ? currentIndex : items.length > 0 ? 0 : -1;
+
+  // Resolve icons based on orientation
+  const resolvedLeftIcon = leftIcon ?? (isVertical ? <IconChevronUp /> : <IconChevronLeft />);
+  const resolvedRightIcon = rightIcon ?? (isVertical ? <IconChevronDown /> : <IconChevronRight />);
+
+  const Container = isVertical ? Stack : Group;
+
+  const scrollStyle = {
+    '--select-stepper-scroll-offset': `${scrollOffset}%`,
+  } as React.CSSProperties;
+
   return (
     <Box ref={ref} {...getStyles('root')}>
       <Input.Wrapper {...wrapperProps}>
         <input type="hidden" value={_value || ''} id={uuid} />
         <Box
-          {...getStyles('wrapper', {
-            style: { '--select-stepper-scroll-offset': `${scrollOffset}%` } as React.CSSProperties,
-          })}
+          {...getStyles('wrapper', { style: scrollStyle })}
           {...others}
           onKeyDown={handleKeyDown}
+          onPointerDown={handlePointerDown}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={handlePointerCancel}
           tabIndex={disabled ? -1 : 0}
           role="spinbutton"
-          mod={[{ 'data-with-border': withBorder, disabled }, mod]}
+          aria-valuemin={0}
+          aria-valuemax={items.length > 0 ? items.length - 1 : 0}
+          aria-valuenow={currentIndex === -1 ? undefined : currentIndex}
+          aria-valuetext={currentLabel}
+          aria-disabled={disabled || undefined}
+          aria-label={typeof label === 'string' ? label : undefined}
+          mod={[
+            {
+              'data-with-border': withBorder,
+              disabled,
+              'data-orientation': orientation,
+            },
+            mod,
+          ]}
         >
-          <Group gap={1}>
+          <Container gap={1}>
             <ActionIcon
               variant={variant}
+              gradient={gradient}
               radius={radius ?? undefined}
+              size={size}
               {...getStyles('leftSection')}
               disabled={disabled || !canGoPrev}
               onClick={handleLeftClick}
+              aria-label={previousLabel}
               {...leftSectionProps}
             >
-              {leftIcon}
+              {resolvedLeftIcon}
             </ActionIcon>
-            <Box {...getStyles('view')}>
-              <Box {...getStyles('scrollArea')} mod={{ animate: animate && isTransitioning }}>
+            <Box {...getStyles('view')} mod={{ 'data-orientation': orientation }}>
+              <Box
+                {...getStyles('scrollArea')}
+                mod={{
+                  animate: animate && isTransitioning,
+                  'data-orientation': orientation,
+                }}
+              >
                 {loop && items.length > 0 ? (
                   // Render 3 sets of items for infinite loop effect: [prev][current][next]
                   <>
@@ -477,7 +685,7 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
                   // Normal rendering without loop
                   <>
                     {items.map((item, index) =>
-                      renderItem(item, 'item', index, index === currentIndex)
+                      renderItem(item, 'item', index, index === displayIndex)
                     )}
                     {items.length === 0 &&
                       (typeof emptyValue === 'string' || typeof emptyValue === 'number' ? (
@@ -491,15 +699,33 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
             </Box>
             <ActionIcon
               variant={variant}
+              gradient={gradient}
               radius={radius ?? undefined}
+              size={size}
               {...getStyles('rightSection')}
               disabled={disabled || !canGoNext}
               onClick={handleRightClick}
+              aria-label={nextLabel}
               {...rightSectionProps}
             >
-              {rightIcon}
+              {resolvedRightIcon}
             </ActionIcon>
-          </Group>
+          </Container>
+        </Box>
+        {/* [A11Y] Screen reader live region for value announcements */}
+        <Box
+          aria-live="polite"
+          aria-atomic="true"
+          style={{
+            position: 'absolute',
+            width: 1,
+            height: 1,
+            overflow: 'hidden',
+            clip: 'rect(0, 0, 0, 0)',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          {currentLabel || ''}
         </Box>
       </Input.Wrapper>
     </Box>

@@ -39,6 +39,38 @@ export const configurator: MantineDemo = {
       libraryValue: '',
     },
     {
+      type: 'select',
+      prop: 'variant',
+      initialValue: 'default',
+      libraryValue: 'default',
+      data: [
+        { value: 'default', label: 'Default' },
+        { value: 'filled', label: 'Filled' },
+        { value: 'light', label: 'Light' },
+        { value: 'outline', label: 'Outline' },
+        { value: 'subtle', label: 'Subtle' },
+        { value: 'transparent', label: 'Transparent' },
+        { value: 'white', label: 'White' },
+        { value: 'gradient', label: 'Gradient' },
+      ],
+    },
+    {
+      type: 'select',
+      prop: 'orientation',
+      initialValue: 'horizontal',
+      libraryValue: 'horizontal',
+      data: [
+        { value: 'horizontal', label: 'Horizontal' },
+        { value: 'vertical', label: 'Vertical' },
+      ],
+    },
+    {
+      type: 'size',
+      prop: 'size',
+      initialValue: 'sm',
+      libraryValue: 'sm',
+    },
+    {
       type: 'boolean',
       prop: 'loop',
       initialValue: false,
