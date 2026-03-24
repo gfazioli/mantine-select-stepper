@@ -56,6 +56,7 @@ export type SelectStepperStylesNames =
 export type SelectStepperCssVariables = {
   root:
     | '--select-stepper-view-width'
+    | '--select-stepper-view-height'
     | '--select-stepper-animation-duration'
     | '--select-stepper-animation-timing-function'
     | '--select-stepper-radius';
@@ -125,6 +126,9 @@ export interface SelectStepperBaseProps {
 
   /** Width of the view area (viewport) */
   viewWidth?: React.CSSProperties['width'];
+
+  /** Height of the view area in vertical orientation @default 36 */
+  viewHeight?: React.CSSProperties['height'];
 
   /** Enable or disable scroll animation */
   animate?: boolean;
@@ -212,6 +216,7 @@ const defaultProps: Partial<SelectStepperProps> = {
   withAsterisk: false,
   labelElement: 'label',
   inputWrapperOrder: ['label', 'description', 'input', 'error'],
+  viewHeight: 36,
   swipeable: true,
   swipeThreshold: 30,
   size: 'sm',
@@ -225,6 +230,7 @@ const varsResolver = createVarsResolver<SelectStepperFactory>(
     _,
     {
       viewWidth,
+      viewHeight,
       animationDuration,
       animationTimingFunction,
       radius,
@@ -243,6 +249,8 @@ const varsResolver = createVarsResolver<SelectStepperFactory>(
       root: {
         '--select-stepper-radius': radius === undefined ? undefined : getRadius(radius),
         '--select-stepper-view-width': typeof viewWidth === 'number' ? `${viewWidth}px` : viewWidth,
+        '--select-stepper-view-height':
+          typeof viewHeight === 'number' ? `${viewHeight}px` : viewHeight,
         '--select-stepper-animation-duration':
           typeof animationDuration === 'number' ? `${animationDuration}ms` : animationDuration,
         '--select-stepper-animation-timing-function': animationTimingFunction,
@@ -274,6 +282,7 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
     disabled,
     emptyValue,
     viewWidth,
+    viewHeight,
     animate,
     animationDuration,
     animationTimingFunction,
