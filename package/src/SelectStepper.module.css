@@ -14,6 +14,7 @@
   margin-top: var(--select-stepper-margin-top, 0rem);
   margin-bottom: var(--select-stepper-margin-bottom, 0rem);
   box-sizing: border-box;
+  touch-action: pan-y;
 
   @mixin light {
     --select-stepper-border-color: var(--mantine-color-gray-3);
@@ -41,17 +42,31 @@
       color: var(--mantine-color-disabled-color);
     }
   }
+
+  &[data-orientation='vertical'] {
+    touch-action: pan-x;
+  }
 }
 
 .view {
   width: var(--select-stepper-view-width);
   overflow: hidden;
   position: relative;
+
+  &[data-orientation='vertical'] {
+    width: var(--select-stepper-view-width);
+    height: auto;
+  }
 }
 
 .scrollArea {
   display: flex;
   transform: translateX(var(--select-stepper-scroll-offset));
+
+  &[data-orientation='vertical'] {
+    flex-direction: column;
+    transform: translateY(var(--select-stepper-scroll-offset));
+  }
 }
 
 .scrollArea[data-animate='true'] {
