@@ -4,6 +4,22 @@ import { render } from '@mantine-tests/core';
 import { SelectStepper, type SelectStepperRef } from './SelectStepper';
 
 const testData = ['React', 'Vue', 'Angular'];
+
+// jsdom doesn't support PointerEvent — polyfill it
+class MockPointerEvent extends MouseEvent {
+  readonly pointerId: number;
+  readonly pointerType: string;
+
+  constructor(type: string, params: PointerEventInit & MouseEventInit = {}) {
+    super(type, { ...params, bubbles: true });
+    this.pointerId = params.pointerId ?? 0;
+    this.pointerType = params.pointerType ?? 'mouse';
+  }
+}
+
+if (typeof window.PointerEvent === 'undefined') {
+  (window as any).PointerEvent = MockPointerEvent;
+}
 const testDataWithDisabled = [
   { value: 'react', label: 'React' },
   { value: 'vue', label: 'Vue', disabled: true },
@@ -535,5 +551,162 @@ describe('SelectStepper', () => {
       <SelectStepper data={testData} variant="gradient" gradient={{ from: 'indigo', to: 'cyan' }} />
     );
     expect(container).toBeTruthy();
+  });
+
+  // ─── Keyboard: ArrowUp/Down only in vertical ─────────────────────
+
+  it('ignores ArrowUp/ArrowDown in horizontal mode', async () => {
+    render(<SelectStepper data={testData} defaultValue="React" />);
+    const wrapper = screen.getByRole('spinbutton');
+
+    await act(async () => {
+      fireEvent.keyDown(wrapper, { key: 'ArrowUp' });
+      fireEvent.keyDown(wrapper, { key: 'ArrowDown' });
+    });
+
+    const hiddenInput = document.querySelector('input[type="hidden"]') as HTMLInputElement;
+    expect(hiddenInput.value).toBe('React');
+  });
+
+  it('ignores ArrowLeft/ArrowRight in vertical mode', async () => {
+    render(<SelectStepper data={testData} defaultValue="React" orientation="vertical" />);
+    const wrapper = screen.getByRole('spinbutton');
+
+    await act(async () => {
+      fireEvent.keyDown(wrapper, { key: 'ArrowLeft' });
+      fireEvent.keyDown(wrapper, { key: 'ArrowRight' });
+    });
+
+    const hiddenInput = document.querySelector('input[type="hidden"]') as HTMLInputElement;
+    expect(hiddenInput.value).toBe('React');
+  });
+
+  // ─── Swipe gestures ──────────────────────────────────────────────
+
+  it('navigates on horizontal swipe left (next)', async () => {
+    render(<SelectStepper data={testData} defaultValue="React" />);
+    const wrapper = screen.getByRole('spinbutton');
+
+    await act(async () => {
+      wrapper.dispatchEvent(new MockPointerEvent('pointerdown', { clientX: 100, clientY: 50 }));
+      wrapper.dispatchEvent(new MockPointerEvent('pointerup', { clientX: 30, clientY: 50 }));
+    });
+
+    const hiddenInput = document.querySelector('input[type="hidden"]') as HTMLInputElement;
+    expect(hiddenInput.value).toBe('Vue');
+  });
+
+  it('navigates on horizontal swipe right (prev)', async () => {
+    render(<SelectStepper data={testData} defaultValue="Vue" />);
+    const wrapper = screen.getByRole('spinbutton');
+
+    await act(async () => {
+      wrapper.dispatchEvent(new MockPointerEvent('pointerdown', { clientX: 30, clientY: 50 }));
+      wrapper.dispatchEvent(new MockPointerEvent('pointerup', { clientX: 100, clientY: 50 }));
+    });
+
+    const hiddenInput = document.querySelector('input[type="hidden"]') as HTMLInputElement;
+    expect(hiddenInput.value).toBe('React');
+  });
+
+  it('does not navigate when swipe distance is below threshold', async () => {
+    render(<SelectStepper data={testData} defaultValue="React" />);
+    const wrapper = screen.getByRole('spinbutton');
+
+    await act(async () => {
+      wrapper.dispatchEvent(new MockPointerEvent('pointerdown', { clientX: 100, clientY: 50 }));
+      wrapper.dispatchEvent(new MockPointerEvent('pointerup', { clientX: 90, clientY: 50 }));
+    });
+
+    const hiddenInput = document.querySelector('input[type="hidden"]') as HTMLInputElement;
+    expect(hiddenInput.value).toBe('React');
+  });
+
+  it('does not navigate on swipe when swipeable={false}', async () => {
+    render(<SelectStepper data={testData} defaultValue="React" swipeable={false} />);
+    const wrapper = screen.getByRole('spinbutton');
+
+    await act(async () => {
+      wrapper.dispatchEvent(new MockPointerEvent('pointerdown', { clientX: 100, clientY: 50 }));
+      wrapper.dispatchEvent(new MockPointerEvent('pointerup', { clientX: 30, clientY: 50 }));
+    });
+
+    const hiddenInput = document.querySelector('input[type="hidden"]') as HTMLInputElement;
+    expect(hiddenInput.value).toBe('React');
+  });
+
+  it('does not navigate on swipe when disabled', async () => {
+    render(<SelectStepper data={testData} defaultValue="React" disabled />);
+    const wrapper = screen.getByRole('spinbutton');
+
+    await act(async () => {
+      wrapper.dispatchEvent(new MockPointerEvent('pointerdown', { clientX: 100, clientY: 50 }));
+      wrapper.dispatchEvent(new MockPointerEvent('pointerup', { clientX: 30, clientY: 50 }));
+    });
+
+    const hiddenInput = document.querySelector('input[type="hidden"]') as HTMLInputElement;
+    expect(hiddenInput.value).toBe('React');
+  });
+
+  it('navigates on vertical swipe in vertical mode', async () => {
+    render(<SelectStepper data={testData} defaultValue="React" orientation="vertical" />);
+    const wrapper = screen.getByRole('spinbutton');
+
+    await act(async () => {
+      wrapper.dispatchEvent(new MockPointerEvent('pointerdown', { clientX: 50, clientY: 100 }));
+      wrapper.dispatchEvent(new MockPointerEvent('pointerup', { clientX: 50, clientY: 30 }));
+    });
+
+    const hiddenInput = document.querySelector('input[type="hidden"]') as HTMLInputElement;
+    expect(hiddenInput.value).toBe('Vue');
+  });
+
+  it('resets pointer on pointerCancel', async () => {
+    render(<SelectStepper data={testData} defaultValue="React" />);
+    const wrapper = screen.getByRole('spinbutton');
+
+    await act(async () => {
+      wrapper.dispatchEvent(new MockPointerEvent('pointerdown', { clientX: 100, clientY: 50 }));
+      wrapper.dispatchEvent(new MockPointerEvent('pointercancel', {}));
+      wrapper.dispatchEvent(new MockPointerEvent('pointerup', { clientX: 30, clientY: 50 }));
+    });
+
+    const hiddenInput = document.querySelector('input[type="hidden"]') as HTMLInputElement;
+    expect(hiddenInput.value).toBe('React');
+  });
+
+  // ─── controlRef edge cases ────────────────────────────────────────
+
+  it('navigateTo does nothing when component is disabled', async () => {
+    const controlRef = React.createRef<SelectStepperRef>();
+    render(<SelectStepper controlRef={controlRef} data={testData} defaultValue="React" disabled />);
+
+    await act(async () => {
+      controlRef.current?.navigateTo('Angular');
+    });
+
+    const hiddenInput = document.querySelector('input[type="hidden"]') as HTMLInputElement;
+    expect(hiddenInput.value).toBe('React');
+  });
+
+  it('reset falls back to first valid item when initial value no longer in data', async () => {
+    const controlRef = React.createRef<SelectStepperRef>();
+    const { rerender } = render(
+      <SelectStepper controlRef={controlRef} data={testData} defaultValue="React" />
+    );
+
+    // Change data so "React" (the initial value) no longer exists
+    await act(async () => {
+      rerender(
+        <SelectStepper controlRef={controlRef} data={['Svelte', 'Solid']} defaultValue="React" />
+      );
+    });
+
+    await act(async () => {
+      controlRef.current?.reset();
+    });
+
+    const hiddenInput = document.querySelector('input[type="hidden"]') as HTMLInputElement;
+    expect(['Svelte', 'Solid']).toContain(hiddenInput.value);
   });
 });

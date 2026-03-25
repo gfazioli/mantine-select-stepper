@@ -10,5 +10,5 @@ export type {
   SelectStepperStylesNames,
   SelectStepperVariant,
 } from './SelectStepper';
-export { SELECT_STEPPER_ERRORS } from './SelectStepper.errors';
+
 export type { ComboboxItem } from '@mantine/core';

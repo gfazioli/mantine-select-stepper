@@ -512,8 +512,8 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
       return;
     }
 
-    const prevKeys = isVertical ? ['ArrowUp'] : ['ArrowLeft', 'ArrowDown'];
-    const nextKeys = isVertical ? ['ArrowDown'] : ['ArrowRight', 'ArrowUp'];
+    const prevKeys = isVertical ? ['ArrowUp'] : ['ArrowLeft'];
+    const nextKeys = isVertical ? ['ArrowDown'] : ['ArrowRight'];
 
     if (prevKeys.includes(event.key)) {
       event.preventDefault();
@@ -540,7 +540,7 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
     }
     const dx = event.clientX - pointerStartRef.current.x;
     const dy = event.clientY - pointerStartRef.current.y;
-    const threshold = swipeThreshold || 30;
+    const threshold = swipeThreshold!;
 
     if (isVertical) {
       if (Math.abs(dy) > threshold && Math.abs(dy) > Math.abs(dx)) {
@@ -562,9 +562,23 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
     next: () => handleNavigation(1),
     prev: () => handleNavigation(-1),
     reset: () => {
-      setValue(initialValueRef.current);
+      const initial = initialValueRef.current;
+      // Validate initialValue still exists in current data
+      if (initial !== null && initial !== undefined) {
+        const exists = items.some((item) => item.value === initial);
+        if (exists) {
+          setValue(initial);
+          return;
+        }
+      }
+      // Fallback to first non-disabled item
+      const firstValid = items.find((item) => !item.disabled);
+      setValue(firstValid?.value ?? null);
     },
     navigateTo: (targetValue: string) => {
+      if (disabled) {
+        return;
+      }
       const targetIndex = items.findIndex((item) => item.value === targetValue);
       if (targetIndex !== -1 && !items[targetIndex].disabled) {
         setValue(targetValue);
@@ -593,7 +607,7 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
         </Text>
       );
     },
-    [renderOption, getStyles]
+    [renderOption, getStyles, items]
   );
 
   const uuid = useId(id);
@@ -735,7 +749,7 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
             whiteSpace: 'nowrap',
           }}
         >
-          {currentLabel || ''}
+          {currentLabel ? `Selected: ${currentLabel}` : ''}
         </Box>
       </Input.Wrapper>
     </Box>
