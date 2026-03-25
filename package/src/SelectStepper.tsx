@@ -403,7 +403,7 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
       }
       setContinuousIndex(currentIndex + (loop ? items.length : 0));
     }
-  }, [_value, items.length, loop]);
+  }, [_value, items.length, loop, currentIndex]);
 
   // [FIX 1.6] Reset value when data changes and current value is no longer present
   useEffect(() => {
@@ -467,6 +467,13 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
       return;
     }
 
+    const nextIndex = findNextValidIndex(currentIndex, direction);
+
+    // Only proceed if there's a real change
+    if (nextIndex === currentIndex || nextIndex === -1) {
+      return;
+    }
+
     // [FIX 1.2] Always clear previous timeout before starting a new one
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -475,39 +482,40 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
 
     setIsTransitioning(true);
     onStepStart?.();
-    const nextIndex = findNextValidIndex(currentIndex, direction);
 
-    if (nextIndex !== currentIndex && nextIndex !== -1) {
-      if (loop) {
-        setContinuousIndex((prev) => prev + direction);
-      }
-      isInternalNavRef.current = true;
-      setValue(items[nextIndex].value);
-
-      // Reset transition flag after animation
-      const duration = typeof animationDuration === 'number' ? animationDuration : 300;
-      timeoutRef.current = setTimeout(() => {
-        if (!mountedRef.current) {
-          return;
-        }
-        setIsTransitioning(false);
-        onStepEnd?.();
-        // Reset to center group if needed
-        if (loop) {
-          setContinuousIndex(items.length + nextIndex);
-        }
-      }, duration);
-    } else {
-      setIsTransitioning(false);
+    if (loop) {
+      setContinuousIndex((prev) => prev + direction);
     }
+    isInternalNavRef.current = true;
+    setValue(items[nextIndex].value);
+
+    // Reset transition flag after animation
+    const duration = typeof animationDuration === 'number' ? animationDuration : 300;
+    timeoutRef.current = setTimeout(() => {
+      if (!mountedRef.current) {
+        return;
+      }
+      setIsTransitioning(false);
+      onStepEnd?.();
+      // Reset to center group if needed
+      if (loop) {
+        setContinuousIndex(items.length + nextIndex);
+      }
+    }, duration);
   };
 
   const handleLeftClick = () => {
+    if (disabled || !canGoPrev) {
+      return;
+    }
     onLeftIconClick?.();
     handleNavigation(-1);
   };
 
   const handleRightClick = () => {
+    if (disabled || !canGoNext) {
+      return;
+    }
     onRightIconClick?.();
     handleNavigation(1);
   };
@@ -545,7 +553,7 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
     }
     const dx = event.clientX - pointerStartRef.current.x;
     const dy = event.clientY - pointerStartRef.current.y;
-    const threshold = swipeThreshold!;
+    const threshold = swipeThreshold ?? 30;
 
     if (isVertical) {
       if (Math.abs(dy) > threshold && Math.abs(dy) > Math.abs(dx)) {
@@ -686,7 +694,7 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
               mod,
             ]}
           >
-            <Container gap={1}>
+            <Container gap={1} wrap="nowrap">
               <ActionIcon
                 variant={variant}
                 gradient={gradient}

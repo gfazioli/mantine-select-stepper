@@ -36,6 +36,7 @@ The [Mantine SelectStepper](https://gfazioli.github.io/mantine-select-stepper/) 
 - **Full keyboard navigation** — Arrow keys with automatic disabled item skipping
 - **Loop mode** — infinite cycling through options
 - **Styles API** — full Mantine Styles API integration with 10 style targets
+- **Responsive props** — `viewWidth`, `viewHeight`, `size`, `orientation` adapt to breakpoints via Mantine's `StyleProp`
 - **Accessible** — ARIA `spinbutton` role, live regions, labeled buttons
 
 ## Installation
