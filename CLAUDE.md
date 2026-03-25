@@ -38,15 +38,15 @@ Single component library with a flat structure:
 
 - `SelectStepper.tsx` — main component, built with `polymorphicFactory` from Mantine
 - `SelectStepper.module.css` — CSS Modules styles (scoped via `hash-css-selector` with `me` prefix)
-- `SelectStepper.test.tsx` — Jest tests (33 tests covering navigation, keyboard, a11y, imperative API, callbacks)
+- `SelectStepper.test.tsx` — Jest tests (66 tests covering navigation, keyboard, a11y, imperative API, callbacks, swipe, responsive)
 - `SelectStepper.story.tsx` — Storybook stories
-- `SelectStepper.errors.ts` — structured error messages
+- `SelectStepperMediaVariables.tsx` — CSS media queries for responsive props (InlineStyles pattern)
 - `get-input-offsets/` — utility for calculating input wrapper margin offsets
-- `index.ts` — public exports (component + all types + `ComboboxItem` re-export)
+- `index.ts` — public exports (component + all types + `ComboboxItem` + `StyleProp` re-export)
 
 ### Exported types
 
-`SelectStepper`, `SelectStepperBaseProps`, `SelectStepperProps`, `SelectStepperFactory`, `SelectStepperCssVariables`, `SelectStepperStylesNames`, `SelectStepperVariant`, `SelectStepperItem`, `SelectStepperOrientation`, `SelectStepperRef`, `ComboboxItem`, `SELECT_STEPPER_ERRORS`
+`SelectStepper`, `SelectStepperBaseProps`, `SelectStepperProps`, `SelectStepperFactory`, `SelectStepperCssVariables`, `SelectStepperStylesNames`, `SelectStepperVariant`, `SelectStepperItem`, `SelectStepperOrientation`, `SelectStepperRef`, `ComboboxItem`, `StyleProp`
 
 ### Build pipeline
 
