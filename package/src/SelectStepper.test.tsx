@@ -709,4 +709,49 @@ describe('SelectStepper', () => {
     const hiddenInput = document.querySelector('input[type="hidden"]') as HTMLInputElement;
     expect(['Svelte', 'Solid']).toContain(hiddenInput.value);
   });
+
+  // ─── Responsive props ─────────────────────────────────────────────
+
+  // Note: jsdom has no matchMedia, so useMatches may return undefined.
+  // We verify the component accepts responsive objects without errors.
+
+  it('accepts responsive viewWidth object without crashing', () => {
+    const { container } = render(
+      <SelectStepper data={testData} viewWidth={{ base: 100, md: 250 }} />
+    );
+    expect(container.firstChild).toBeTruthy();
+  });
+
+  it('accepts responsive size object without crashing', () => {
+    render(<SelectStepper data={testData} size={{ base: 'xs', md: 'lg' }} />);
+    const buttons = screen.getAllByRole('button');
+    expect(buttons.length).toBe(2);
+  });
+
+  it('accepts responsive viewHeight object without crashing', () => {
+    const { container } = render(
+      <SelectStepper data={testData} orientation="vertical" viewHeight={{ base: 30, md: 50 }} />
+    );
+    expect(container.firstChild).toBeTruthy();
+  });
+
+  it('accepts responsive orientation object without crashing', () => {
+    const { container } = render(
+      <SelectStepper data={testData} orientation={{ base: 'vertical', md: 'horizontal' }} />
+    );
+    expect(container.firstChild).toBeTruthy();
+  });
+
+  it('still accepts scalar values for viewWidth/size/viewHeight/orientation', () => {
+    const { container } = render(
+      <SelectStepper
+        data={testData}
+        viewWidth={180}
+        size="md"
+        viewHeight={40}
+        orientation="horizontal"
+      />
+    );
+    expect(container.firstChild).toBeTruthy();
+  });
 });

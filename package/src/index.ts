@@ -11,4 +11,4 @@ export type {
   SelectStepperVariant,
 } from './SelectStepper';
 
-export type { ComboboxItem } from '@mantine/core';
+export type { ComboboxItem, StyleProp } from '@mantine/core';

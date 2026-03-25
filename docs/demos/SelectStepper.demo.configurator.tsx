@@ -126,6 +126,15 @@ export const configurator: MantineDemo = {
       step: 20,
     },
     {
+      type: 'number',
+      prop: 'viewHeight',
+      initialValue: 36,
+      libraryValue: 36,
+      min: 20,
+      max: 100,
+      step: 4,
+    },
+    {
       type: 'size',
       prop: 'radius',
       initialValue: 'sm',
