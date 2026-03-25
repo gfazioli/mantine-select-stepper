@@ -13,6 +13,7 @@ export { imperative } from './SelectStepper.demo.imperative';
 export { inForm } from './SelectStepper.demo.inForm';
 export { loop } from './SelectStepper.demo.loop';
 export { renderOption } from './SelectStepper.demo.renderOption';
+export { responsive } from './SelectStepper.demo.responsive';
 export { sizes } from './SelectStepper.demo.size';
 export { stylesApi } from './SelectStepper.demo.stylesApi';
 export { swipeable } from './SelectStepper.demo.swipeable';

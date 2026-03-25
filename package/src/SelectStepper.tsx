@@ -19,16 +19,20 @@ import {
   Stack,
   StylesApiProps,
   Text,
+  useMatches,
   useProps,
+  useRandomClassName,
   useStyles,
   type __InputWrapperProps,
   type ActionIconProps,
   type ComboboxItem,
   type MantineGradient,
   type MantineRadius,
+  type StyleProp,
 } from '@mantine/core';
 import { useId, useUncontrolled } from '@mantine/hooks';
 import { getInputOffsets } from './get-input-offsets/get-input-offsets';
+import { SelectStepperMediaVariables } from './SelectStepperMediaVariables';
 import classes from './SelectStepper.module.css';
 
 export type SelectStepperVariant =
@@ -124,11 +128,11 @@ export interface SelectStepperBaseProps {
   /** If true, the stepper will be disabled */
   disabled?: boolean;
 
-  /** Width of the view area (viewport) */
-  viewWidth?: React.CSSProperties['width'];
+  /** Width of the view area (viewport). Supports responsive values, e.g. `{ base: 120, md: 200 }` */
+  viewWidth?: StyleProp<React.CSSProperties['width']>;
 
-  /** Height of the view area in vertical orientation @default 36 */
-  viewHeight?: React.CSSProperties['height'];
+  /** Height of the view area in vertical orientation. Supports responsive values @default 36 */
+  viewHeight?: StyleProp<React.CSSProperties['height']>;
 
   /** Enable or disable scroll animation */
   animate?: boolean;
@@ -169,11 +173,11 @@ export interface SelectStepperBaseProps {
   /** Callback fired when navigation animation ends */
   onStepEnd?: () => void;
 
-  /** Component size, controls ActionIcon size and font size @default 'sm' */
-  size?: MantineSize;
+  /** Component size, controls ActionIcon size and font size. Supports responsive values @default 'sm' */
+  size?: StyleProp<MantineSize>;
 
-  /** Orientation of the stepper @default 'horizontal' */
-  orientation?: SelectStepperOrientation;
+  /** Orientation of the stepper. Supports responsive values @default 'horizontal' */
+  orientation?: StyleProp<SelectStepperOrientation>;
 
   /** Accessible label for the previous button @default 'Previous item' */
   previousLabel?: string;
@@ -228,16 +232,7 @@ const defaultProps: Partial<SelectStepperProps> = {
 const varsResolver = createVarsResolver<SelectStepperFactory>(
   (
     _,
-    {
-      viewWidth,
-      viewHeight,
-      animationDuration,
-      animationTimingFunction,
-      radius,
-      description,
-      error,
-      inputWrapperOrder,
-    }
+    { animationDuration, animationTimingFunction, radius, description, error, inputWrapperOrder }
   ) => {
     const hasError = !!error && typeof error !== 'boolean';
     const hasDescription = !!description;
@@ -248,9 +243,9 @@ const varsResolver = createVarsResolver<SelectStepperFactory>(
     return {
       root: {
         '--select-stepper-radius': radius === undefined ? undefined : getRadius(radius),
-        '--select-stepper-view-width': typeof viewWidth === 'number' ? `${viewWidth}px` : viewWidth,
-        '--select-stepper-view-height':
-          typeof viewHeight === 'number' ? `${viewHeight}px` : viewHeight,
+        // viewWidth and viewHeight are resolved via useResponsiveValue in the component body
+        '--select-stepper-view-width': undefined,
+        '--select-stepper-view-height': undefined,
         '--select-stepper-animation-duration':
           typeof animationDuration === 'number' ? `${animationDuration}ms` : animationDuration,
         '--select-stepper-animation-timing-function': animationTimingFunction,
@@ -337,10 +332,20 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
     varsResolver,
   });
 
+  // Scoped class name for InlineStyles responsive CSS
+  const responsiveClassName = useRandomClassName();
+
+  // Resolve orientation via useMatches (JS-consumed: controls layout, keyboard, icons)
+  const resolvedOrientation = useMatches(
+    typeof orientation === 'object' && orientation !== null
+      ? (orientation as Record<string, SelectStepperOrientation>)
+      : { base: orientation ?? 'horizontal' }
+  ) as SelectStepperOrientation;
+
   // [PERF] Memoize normalized data
   const items = useMemo(() => normalizeData(data), [data]);
 
-  const isVertical = orientation === 'vertical';
+  const isVertical = resolvedOrientation === 'vertical';
 
   // [FIX 1.4] defaultValue={null} should mean "no selection", check !== undefined
   const firstNonDisabledItem = items.find((item) => !item.disabled);
@@ -647,112 +652,120 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
   } as React.CSSProperties;
 
   return (
-    <Box ref={ref} {...getStyles('root')}>
-      <Input.Wrapper {...wrapperProps}>
-        <input type="hidden" value={_value || ''} id={uuid} />
-        <Box
-          {...getStyles('wrapper', { style: scrollStyle })}
-          {...others}
-          onKeyDown={handleKeyDown}
-          onPointerDown={handlePointerDown}
-          onPointerUp={handlePointerUp}
-          onPointerCancel={handlePointerCancel}
-          tabIndex={disabled ? -1 : 0}
-          role="spinbutton"
-          aria-valuemin={0}
-          aria-valuemax={items.length > 0 ? items.length - 1 : 0}
-          aria-valuenow={currentIndex === -1 ? undefined : currentIndex}
-          aria-valuetext={currentLabel}
-          aria-disabled={disabled || undefined}
-          aria-label={typeof label === 'string' ? label : undefined}
-          mod={[
-            {
-              'data-with-border': withBorder,
-              disabled,
-              'data-orientation': orientation,
-            },
-            mod,
-          ]}
-        >
-          <Container gap={1}>
-            <ActionIcon
-              variant={variant}
-              gradient={gradient}
-              radius={radius ?? undefined}
-              size={size}
-              {...getStyles('leftSection')}
-              disabled={disabled || !canGoPrev}
-              onClick={handleLeftClick}
-              aria-label={previousLabel}
-              {...leftSectionProps}
-            >
-              {resolvedLeftIcon}
-            </ActionIcon>
-            <Box {...getStyles('view')} mod={{ 'data-orientation': orientation }}>
-              <Box
-                {...getStyles('scrollArea')}
-                mod={{
-                  animate: animate && isTransitioning,
-                  'data-orientation': orientation,
-                }}
+    <>
+      <SelectStepperMediaVariables
+        viewWidth={viewWidth}
+        viewHeight={viewHeight}
+        size={size}
+        selector={`.${responsiveClassName}`}
+      />
+      <Box ref={ref} {...getStyles('root', { className: responsiveClassName })}>
+        <Input.Wrapper {...wrapperProps}>
+          <input type="hidden" value={_value || ''} id={uuid} />
+          <Box
+            {...getStyles('wrapper', { style: scrollStyle })}
+            {...others}
+            onKeyDown={handleKeyDown}
+            onPointerDown={handlePointerDown}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={handlePointerCancel}
+            tabIndex={disabled ? -1 : 0}
+            role="spinbutton"
+            aria-valuemin={0}
+            aria-valuemax={items.length > 0 ? items.length - 1 : 0}
+            aria-valuenow={currentIndex === -1 ? undefined : currentIndex}
+            aria-valuetext={currentLabel}
+            aria-disabled={disabled || undefined}
+            aria-label={typeof label === 'string' ? label : undefined}
+            mod={[
+              {
+                'data-with-border': withBorder,
+                disabled,
+                'data-orientation': resolvedOrientation,
+              },
+              mod,
+            ]}
+          >
+            <Container gap={1}>
+              <ActionIcon
+                variant={variant}
+                gradient={gradient}
+                radius={radius ?? undefined}
+                style={{ '--ai-size': 'var(--select-stepper-action-size)' } as React.CSSProperties}
+                {...getStyles('leftSection')}
+                disabled={disabled || !canGoPrev}
+                onClick={handleLeftClick}
+                aria-label={previousLabel}
+                {...leftSectionProps}
               >
-                {loop && items.length > 0 ? (
-                  // Render 3 sets of items for infinite loop effect: [prev][current][next]
-                  <>
-                    {items.map((item, index) => renderItem(item, 'prev', index))}
-                    {items.map((item, index) =>
-                      renderItem(item, 'current', index, index === currentIndex)
-                    )}
-                    {items.map((item, index) => renderItem(item, 'next', index))}
-                  </>
-                ) : (
-                  // Normal rendering without loop
-                  <>
-                    {items.map((item, index) =>
-                      renderItem(item, 'item', index, index === displayIndex)
-                    )}
-                    {items.length === 0 &&
-                      (typeof emptyValue === 'string' || typeof emptyValue === 'number' ? (
-                        <Text {...getStyles('content')}>{emptyValue}</Text>
-                      ) : (
-                        <Box {...getStyles('content')}>{emptyValue}</Box>
-                      ))}
-                  </>
-                )}
+                {resolvedLeftIcon}
+              </ActionIcon>
+              <Box {...getStyles('view')} mod={{ 'data-orientation': resolvedOrientation }}>
+                <Box
+                  {...getStyles('scrollArea')}
+                  mod={{
+                    animate: animate && isTransitioning,
+                    'data-orientation': resolvedOrientation,
+                  }}
+                >
+                  {loop && items.length > 0 ? (
+                    // Render 3 sets of items for infinite loop effect: [prev][current][next]
+                    <>
+                      {items.map((item, index) => renderItem(item, 'prev', index))}
+                      {items.map((item, index) =>
+                        renderItem(item, 'current', index, index === currentIndex)
+                      )}
+                      {items.map((item, index) => renderItem(item, 'next', index))}
+                    </>
+                  ) : (
+                    // Normal rendering without loop
+                    <>
+                      {items.map((item, index) =>
+                        renderItem(item, 'item', index, index === displayIndex)
+                      )}
+                      {items.length === 0 &&
+                        (typeof emptyValue === 'string' || typeof emptyValue === 'number' ? (
+                          <Text {...getStyles('content')}>{emptyValue}</Text>
+                        ) : (
+                          <Box {...getStyles('content')}>{emptyValue}</Box>
+                        ))}
+                    </>
+                  )}
+                </Box>
               </Box>
-            </Box>
-            <ActionIcon
-              variant={variant}
-              gradient={gradient}
-              radius={radius ?? undefined}
-              size={size}
-              {...getStyles('rightSection')}
-              disabled={disabled || !canGoNext}
-              onClick={handleRightClick}
-              aria-label={nextLabel}
-              {...rightSectionProps}
-            >
-              {resolvedRightIcon}
-            </ActionIcon>
-          </Container>
-        </Box>
-        {/* [A11Y] Screen reader live region for value announcements */}
-        <Box
-          aria-live="polite"
-          aria-atomic="true"
-          style={{
-            position: 'absolute',
-            width: 1,
-            height: 1,
-            overflow: 'hidden',
-            clip: 'rect(0, 0, 0, 0)',
-            whiteSpace: 'nowrap',
-          }}
-        >
-          {currentLabel ? `Selected: ${currentLabel}` : ''}
-        </Box>
-      </Input.Wrapper>
-    </Box>
+              <ActionIcon
+                variant={variant}
+                gradient={gradient}
+                radius={radius ?? undefined}
+                style={{ '--ai-size': 'var(--select-stepper-action-size)' } as React.CSSProperties}
+                {...getStyles('rightSection')}
+                disabled={disabled || !canGoNext}
+                onClick={handleRightClick}
+                aria-label={nextLabel}
+                {...rightSectionProps}
+              >
+                {resolvedRightIcon}
+              </ActionIcon>
+            </Container>
+          </Box>
+          {/* [A11Y] Screen reader live region for value announcements */}
+          <Box
+            aria-live="polite"
+            aria-atomic="true"
+            style={{
+              position: 'absolute',
+              width: 1,
+              height: 1,
+              overflow: 'hidden',
+              clip: 'rect(0, 0, 0, 0)',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {currentLabel ? `Selected: ${currentLabel}` : ''}
+          </Box>
+        </Input.Wrapper>
+      </Box>
+    </>
   );
 });
 
