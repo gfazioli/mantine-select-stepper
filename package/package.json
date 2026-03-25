@@ -1,6 +1,6 @@
 {
   "name": "@gfazioli/mantine-select-stepper",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "description": "Mantine SelectStepper is a React component for cycling through options via stepper buttons. Supports keyboard navigation, infinite looping, swipe gestures, vertical orientation, responsive props, imperative API, disabled items, smooth animations, and full Mantine Styles API integration.",
   "homepage": "https://gfazioli.github.io/mantine-select-stepper/",
   "packageManager": "yarn@4.0.1",
