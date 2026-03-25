@@ -12,6 +12,7 @@
   border-radius: var(--select-stepper-radius, var(--mantine-radius-default));
   position: relative;
   padding: 3px;
+  width: max-content;
   max-width: 100%;
   margin-top: var(--select-stepper-margin-top, 0rem);
   margin-bottom: var(--select-stepper-margin-bottom, 0rem);
