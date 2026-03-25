@@ -18,7 +18,7 @@ function toCssValue(value: string | number | undefined): string | undefined {
   return typeof value === 'number' ? `${value}px` : value;
 }
 
-// ActionIcon size values from Mantine's ActionIcon.module.css
+// ActionIcon size values from Mantine 8.x ActionIcon.module.css
 // Cannot use var(--ai-size-sm) because those vars are scoped to ActionIcon's own element
 const AI_SIZE_VALUES: Record<string, string> = {
   xs: '18px',

@@ -38,7 +38,7 @@ Single component library with a flat structure:
 
 - `SelectStepper.tsx` — main component, built with `polymorphicFactory` from Mantine
 - `SelectStepper.module.css` — CSS Modules styles (scoped via `hash-css-selector` with `me` prefix)
-- `SelectStepper.test.tsx` — Jest tests (66 tests covering navigation, keyboard, a11y, imperative API, callbacks, swipe, responsive)
+- `SelectStepper.test.tsx` — Jest tests covering navigation, keyboard, a11y, imperative API, callbacks, swipe, responsive
 - `SelectStepper.story.tsx` — Storybook stories
 - `SelectStepperMediaVariables.tsx` — CSS media queries for responsive props (InlineStyles pattern)
 - `get-input-offsets/` — utility for calculating input wrapper margin offsets

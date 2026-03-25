@@ -698,7 +698,7 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
               mod,
             ]}
           >
-            <Container gap={1} wrap="nowrap">
+            <Container gap={1} {...(!isVertical && { wrap: 'nowrap' })}>
               <ActionIcon
                 variant={variant}
                 gradient={gradient}
