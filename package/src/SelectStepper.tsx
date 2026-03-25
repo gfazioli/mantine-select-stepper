@@ -414,7 +414,7 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
         setValue(firstValid?.value || items[0].value);
       }
     }
-  }, [items]);
+  }, [items, _value]);
 
   // Calculate scroll offset based on continuous index
   const scrollOffset = loop
@@ -689,6 +689,7 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
             aria-valuetext={currentLabel}
             aria-disabled={disabled || undefined}
             aria-label={typeof label === 'string' ? label : undefined}
+            aria-labelledby={typeof label !== 'string' && label ? `${uuid}-label` : undefined}
             mod={[
               {
                 'data-with-border': withBorder,

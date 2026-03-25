@@ -9,7 +9,7 @@ import { SelectStepper, type SelectStepperRef } from '@gfazioli/mantine-select-s
 import { Button, Group, Stack } from '@mantine/core';
 
 function Demo() {
-  const controlRef = useRef<SelectStepperRef>(null);
+  const controlRef = useRef<SelectStepperRef | null>(null);
 
   return (
     <Stack>
@@ -38,7 +38,7 @@ function Demo() {
 `;
 
 function Demo() {
-  const controlRef = useRef<SelectStepperRef>(null);
+  const controlRef = useRef<SelectStepperRef | null>(null);
 
   return (
     <Stack>
