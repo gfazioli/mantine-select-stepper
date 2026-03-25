@@ -659,6 +659,10 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
     '--select-stepper-scroll-offset': `${scrollOffset}%`,
   } as React.CSSProperties;
 
+  const actionSizeStyle = {
+    '--ai-size': 'var(--select-stepper-action-size)',
+  } as React.CSSProperties;
+
   return (
     <>
       <SelectStepperMediaVariables
@@ -699,8 +703,7 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
                 variant={variant}
                 gradient={gradient}
                 radius={radius ?? undefined}
-                style={{ '--ai-size': 'var(--select-stepper-action-size)' } as React.CSSProperties}
-                {...getStyles('leftSection')}
+                {...getStyles('leftSection', { style: actionSizeStyle })}
                 disabled={disabled || !canGoPrev}
                 onClick={handleLeftClick}
                 aria-label={previousLabel}
@@ -745,8 +748,7 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
                 variant={variant}
                 gradient={gradient}
                 radius={radius ?? undefined}
-                style={{ '--ai-size': 'var(--select-stepper-action-size)' } as React.CSSProperties}
-                {...getStyles('rightSection')}
+                {...getStyles('rightSection', { style: actionSizeStyle })}
                 disabled={disabled || !canGoNext}
                 onClick={handleRightClick}
                 aria-label={nextLabel}
