@@ -68,17 +68,22 @@ Non-index chunks are automatically prefixed with `'use client'` directive.
 
 - `polymorphicFactory` for component creation (supports `component` prop)
 - `useProps` with `defaultProps` for prop resolution
-- `createVarsResolver` for CSS variable mapping
+- `createVarsResolver` for CSS variable mapping (non-responsive props only)
 - `useStyles` for Styles API integration
 - `useUncontrolled` for controlled/uncontrolled value state (with `onChange` passed through)
 - `useImperativeHandle` for imperative API via `controlRef` prop
 - `Input.Wrapper` for label, description, error support
+- `InlineStyles` + `useRandomClassName` for responsive CSS media queries (`viewWidth`, `viewHeight`, `size`)
+- `useMatches` for JS-consumed responsive props (`orientation`)
 
 ### Key implementation details
 
+- **Responsive props (CSS-native):** `SelectStepperMediaVariables` generates `<style>` with `@media` queries for `viewWidth`, `viewHeight`, `size` — zero React re-renders on resize. Uses concrete pixel values for `--ai-size` (NOT `var(--ai-size-sm)` references which are scoped to ActionIcon's CSS module). Override passed via `getStyles('leftSection', { style: actionSizeStyle })` to merge with computed styles.
+- **Responsive orientation (JS):** `useMatches` resolves `orientation` because it controls React component structure (Stack/Group), keyboard keys, and icon direction — cannot be expressed as CSS.
 - **Internal vs external navigation flag:** `isInternalNavRef` distinguishes navigation-triggered value changes from external controlled mode changes, preventing the sync `useEffect` from canceling the animation timeout
 - **Pointer events for swipe:** Uses `PointerDown/PointerUp` with threshold detection, no external dependencies
 - **Vertical mode:** Switches `Group` → `Stack`, `translateX` → `translateY`, and remaps keyboard arrow keys
+- **Narrow container handling:** `.view` uses `min-width: 0` to allow flex shrinking; `.content` uses `width: 100%` (not fixed CSS var) so items match the actual view width and `translateX(-100%)` stays aligned
 
 ## Tech Stack
 

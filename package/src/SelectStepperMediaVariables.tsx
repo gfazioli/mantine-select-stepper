@@ -2,7 +2,6 @@ import React from 'react';
 import {
   filterProps,
   getBaseValue,
-  getSize,
   getSortedBreakpoints,
   InlineStyles,
   keys,
@@ -19,11 +18,21 @@ function toCssValue(value: string | number | undefined): string | undefined {
   return typeof value === 'number' ? `${value}px` : value;
 }
 
+// ActionIcon size values from Mantine's ActionIcon.module.css
+// Cannot use var(--ai-size-sm) because those vars are scoped to ActionIcon's own element
+const AI_SIZE_VALUES: Record<string, string> = {
+  xs: '18px',
+  sm: '22px',
+  md: '28px',
+  lg: '34px',
+  xl: '44px',
+};
+
 function toAiSize(value: MantineSize | undefined): string | undefined {
   if (value === undefined) {
     return undefined;
   }
-  return getSize(value, 'ai-size');
+  return AI_SIZE_VALUES[value] ?? AI_SIZE_VALUES.sm;
 }
 
 interface SelectStepperMediaVariablesProps {
