@@ -5,13 +5,14 @@
   --select-stepper-animation-duration: 300ms;
   --select-stepper-animation-timing-function: ease-in-out;
   position: relative;
+  max-width: 100%;
 }
 
 .wrapper {
   border-radius: var(--select-stepper-radius, var(--mantine-radius-default));
   position: relative;
   padding: 3px;
-  max-width: max-content;
+  max-width: 100%;
   margin-top: var(--select-stepper-margin-top, 0rem);
   margin-bottom: var(--select-stepper-margin-bottom, 0rem);
   box-sizing: border-box;
@@ -51,11 +52,15 @@
 
 .view {
   width: var(--select-stepper-view-width);
+  min-width: 0;
+  flex: 0 1 auto;
   overflow: hidden;
   position: relative;
 
   &[data-orientation='vertical'] {
     width: auto;
+    min-width: auto;
+    flex: 0 0 auto;
     height: var(--select-stepper-view-height);
   }
 }
@@ -77,8 +82,8 @@
 }
 
 .content {
-  min-width: var(--select-stepper-view-width);
-  width: var(--select-stepper-view-width);
+  min-width: 100%;
+  width: 100%;
   text-align: center;
   display: flex;
   align-items: center;
