@@ -14,7 +14,7 @@
 | `yarn docs:build` | Build the Next.js docs site for production |
 | `yarn docs:deploy` | Build and deploy docs to GitHub Pages |
 | `yarn lint` | Run oxlint |
-| `yarn oxfmt:write` | Format all files with oxfmt |
+| `yarn format:write` | Format all files with oxfmt |
 | `yarn storybook` | Start Storybook dev server |
 | `yarn clean` | Remove build artifacts |
 | `yarn release:patch` | Bump patch version and deploy docs |

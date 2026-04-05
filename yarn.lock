@@ -2246,21 +2246,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mantine/dates@npm:8.3.15":
-  version: 8.3.15
-  resolution: "@mantine/dates@npm:8.3.15"
-  dependencies:
-    clsx: "npm:^2.1.1"
-  peerDependencies:
-    "@mantine/core": 8.3.15
-    "@mantine/hooks": 8.3.15
-    dayjs: ">=1.0.0"
-    react: ^18.x || ^19.x
-    react-dom: ^18.x || ^19.x
-  checksum: 10c0/ec1f6f482b135524181d22f9d324ae65a4ca815059d1af367482411c469751fbcf61301ee631e4d60be4e488cb4432c26ef6d6b33d2f0a200bf81dee43ab6b78
-  languageName: node
-  linkType: hard
-
 "@mantine/hooks@npm:9.0.0":
   version: 9.0.0
   resolution: "@mantine/hooks@npm:9.0.0"
@@ -6317,7 +6302,6 @@ __metadata:
     "@gfazioli/mantine-select-stepper": "workspace:*"
     "@mantine/code-highlight": "npm:9.0.0"
     "@mantine/core": "npm:9.0.0"
-    "@mantine/dates": "npm:8.3.15"
     "@mantine/hooks": "npm:9.0.0"
     "@mantinex/demo": "npm:^2.0.0"
     "@mantinex/dev-icons": "npm:^2.0.0"
