@@ -236,10 +236,13 @@ const varsResolver = createVarsResolver<SelectStepperFactory>(
   ) => {
     const hasError = !!error && typeof error !== 'boolean';
     const hasDescription = !!description;
-    const { offsetBottom, offsetTop } = getInputOffsets(inputWrapperOrder, {
-      hasDescription,
-      hasError,
-    });
+    const { offsetBottom, offsetTop } = getInputOffsets(
+      inputWrapperOrder ?? ['label', 'input', 'description', 'error'],
+      {
+        hasDescription,
+        hasError,
+      }
+    );
     return {
       root: {
         '--select-stepper-radius': radius === undefined ? undefined : getRadius(radius),
@@ -262,7 +265,7 @@ const varsResolver = createVarsResolver<SelectStepperFactory>(
   }
 );
 
-export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, ref) => {
+export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props) => {
   const props = useProps('SelectStepper', defaultProps, _props);
   const {
     data,
@@ -343,7 +346,7 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
   ) as SelectStepperOrientation;
 
   // [PERF] Memoize normalized data
-  const items = useMemo(() => normalizeData(data), [data]);
+  const items = useMemo(() => normalizeData(data ?? []), [data]);
 
   const isVertical = resolvedOrientation === 'vertical';
 
@@ -403,6 +406,7 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
       }
       setContinuousIndex(currentIndex + (loop ? items.length : 0));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- isTransitioning is intentionally excluded to avoid canceling animations
   }, [_value, items.length, loop, currentIndex]);
 
   // [FIX 1.6] Reset value when data changes and current value is no longer present
@@ -414,6 +418,7 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
         setValue(firstValid?.value || items[0].value);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- setValue is stable; adding it causes re-sync loops
   }, [items, _value]);
 
   // Calculate scroll offset based on continuous index
@@ -620,12 +625,12 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
         </Text>
       );
     },
-    [renderOption, getStyles, items]
+    [renderOption, getStyles]
   );
 
   const uuid = useId(id);
 
-  const wrapperProps = {
+  const wrapperProps: Record<string, unknown> = {
     id: uuid,
     label,
     description,
@@ -637,10 +642,10 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
     errorProps,
     labelElement,
     inputWrapperOrder,
-    classNames: classNames as unknown,
-    styles: styles as unknown,
+    classNames,
+    styles,
     unstyled,
-    style: style as unknown,
+    style,
   };
 
   // Determine current label for aria-valuetext
@@ -671,7 +676,7 @@ export const SelectStepper = polymorphicFactory<SelectStepperFactory>((_props, r
         size={size}
         selector={`.${responsiveClassName}`}
       />
-      <Box ref={ref} {...getStyles('root', { className: responsiveClassName })}>
+      <Box {...getStyles('root', { className: responsiveClassName })}>
         <Input.Wrapper {...wrapperProps}>
           <input type="hidden" value={_value || ''} id={uuid} />
           <Box

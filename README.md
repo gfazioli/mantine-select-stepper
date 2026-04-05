@@ -18,6 +18,7 @@
 ## Overview
 
 This component is created on top of the [Mantine](https://mantine.dev/) library.
+It requires **Mantine 9.x** and **React 19**.
 
 The [Mantine SelectStepper](https://gfazioli.github.io/mantine-select-stepper/) is a Mantine-based React component that provides an elegant way to select from a list of options through a stepper interface. Users can navigate forward and backward through items using action buttons, with support for keyboard navigation, infinite looping, disabled items, and smooth animations. Built with TypeScript and fully integrated with Mantine's Styles API, it offers extensive customization options including custom icons, animation timing, viewport width, and border styling.
 
