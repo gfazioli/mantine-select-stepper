@@ -398,11 +398,8 @@ describe('SelectStepper', () => {
     });
 
     const hiddenInput = document.querySelector('input[type="hidden"]') as HTMLInputElement;
-    if (hiddenInput.value === 'Vue') {
-      expect(onStart).toHaveBeenCalledTimes(1);
-    } else {
-      expect(hiddenInput.value).toBe('Vue');
-    }
+    expect(hiddenInput.value).toBe('Vue');
+    expect(onStart).toHaveBeenCalledTimes(1);
   });
 
   it('calls onStepEnd after animation completes', async () => {
