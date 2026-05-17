@@ -1,7 +1,7 @@
-import { useState } from 'react';
 import { SelectStepper } from '@gfazioli/mantine-select-stepper';
 import { Badge, Code, Group, Stack, type ComboboxItem } from '@mantine/core';
 import { MantineDemo } from '@mantinex/demo';
+import { useState } from 'react';
 
 const code = `
 import { useState } from 'react';

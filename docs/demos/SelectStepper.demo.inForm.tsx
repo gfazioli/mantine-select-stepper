@@ -1,7 +1,7 @@
 import { SelectStepper } from '@gfazioli/mantine-select-stepper';
-import { IconMinus, IconPlus } from '@tabler/icons-react';
 import { Flex, Group, Stack, TextInput } from '@mantine/core';
 import { MantineDemo } from '@mantinex/demo';
+import { IconMinus, IconPlus } from '@tabler/icons-react';
 
 const code = `
 import { IconMinus, IconPlus } from '@tabler/icons-react';

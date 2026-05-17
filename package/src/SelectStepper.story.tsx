@@ -1,5 +1,3 @@
-import React, { useRef, useState } from 'react';
-import { IconCheck, IconMinus, IconPlus } from '@tabler/icons-react';
 import {
   Badge,
   Button,
@@ -11,6 +9,8 @@ import {
   TextInput,
   type ComboboxItem,
 } from '@mantine/core';
+import { IconCheck, IconMinus, IconPlus } from '@tabler/icons-react';
+import React, { useRef, useState } from 'react';
 import { SelectStepper, type SelectStepperRef } from './SelectStepper';
 import classes from './Story.module.css';
 
