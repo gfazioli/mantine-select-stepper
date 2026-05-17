@@ -1,8 +1,8 @@
-import { useState } from 'react';
 import { SelectStepper } from '@gfazioli/mantine-select-stepper';
-import { IconCheck, IconMinus, IconPlus } from '@tabler/icons-react';
 import { Badge } from '@mantine/core';
 import { MantineDemo } from '@mantinex/demo';
+import { IconCheck, IconMinus, IconPlus } from '@tabler/icons-react';
+import { useState } from 'react';
 
 const code = `
 import { useState } from 'react';

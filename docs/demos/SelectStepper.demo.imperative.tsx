@@ -1,7 +1,7 @@
-import { useRef } from 'react';
 import { SelectStepper, type SelectStepperRef } from '@gfazioli/mantine-select-stepper';
 import { Button, Group, Stack } from '@mantine/core';
 import { MantineDemo } from '@mantinex/demo';
+import { useRef } from 'react';
 
 const code = `
 import { useRef } from 'react';

@@ -1,10 +1,3 @@
-import React, { useEffect, useImperativeHandle, useMemo, useRef } from 'react';
-import {
-  IconChevronDown,
-  IconChevronLeft,
-  IconChevronRight,
-  IconChevronUp,
-} from '@tabler/icons-react';
 import {
   ActionIcon,
   Box,
@@ -31,6 +24,13 @@ import {
   type StyleProp,
 } from '@mantine/core';
 import { useId, useUncontrolled } from '@mantine/hooks';
+import {
+  IconChevronDown,
+  IconChevronLeft,
+  IconChevronRight,
+  IconChevronUp,
+} from '@tabler/icons-react';
+import React, { useEffect, useImperativeHandle, useMemo, useRef } from 'react';
 import { getInputOffsets } from './get-input-offsets/get-input-offsets';
 import { SelectStepperMediaVariables } from './SelectStepperMediaVariables';
 import classes from './SelectStepper.module.css';
