@@ -119,8 +119,4 @@ Your help truly matters.
 
 ---
 
-[![Star History Chart](https://api.star-history.com/svg?repos=gfazioli/mantine-select-stepper&type=Timeline)](https://www.star-history.com/#gfazioli/mantine-select-stepper&Timeline)
-
----
-
 https://github.com/user-attachments/assets/d430dd46-2da5-46e3-8dcd-73f666f8c6fe
